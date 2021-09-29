@@ -1,0 +1,465 @@
+\documentclass{beamer}
+
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother 
+
+
+\setbeamercovered{highly dynamic}
+\newcounter{saveenumi}
+\newcommand{\seti}{\setcounter{saveenumi}{\value{enumi}}}
+\newcommand{\conti}{\setcounter{enumi}{\value{saveenumi}}}
+
+\title{\textsc{ Game Theory}}
+
+
+\subtitle{Lecture 3: Decision Making with Uncertainty} 
+\author{Instructor:  Mariam Arzumanyan}
+
+
+\date[YSU, Fall 2021]{Yerevan State University \\September 28, 2021 }
+
+\setbeamercovered{invisible}
+\subject{Lecture Session}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+\pgfdeclareimage[height=0.7cm]{Illinilogo}{ill.png}
+\logo{\pgfuseimage{Illinilogo}} 
+% Let's get started
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Introduction}
+This course consists of four major blocks. 
+    \begin{itemize}
+        \item Static games of complete information
+        \item Dynamic games of complete information
+        \item Static games of incomplete information
+        \item Dynamic games of incomplete information
+    \end{itemize}
+    Lecture notes are based on Tadelis, "Game Theory: An Introduction", Chapter 2, pages 14-33.
+\end{frame}
+\begin{frame}{Last Class}
+    \begin{itemize}
+        \item Last class we discussed single agent decision making.
+        \item Basically, each agent chooses the best alternative among the set of available alternatives. 
+        \item Single agent decision making problems are too simple and not realistic. 
+        \item This framework can be extended at least in two directions:
+           \begin{enumerate}
+               \item Adding \textbf{Uncertainty}
+                    \par The payoff now will not be deterministically determined by the action
+chosen by the agent.
+
+               \item Adding more \textbf{Agents} 
+               \par The payoff may be affected by the actions taken by other players
+           \end{enumerate}
+    \end{itemize}
+\end{frame}
+\begin{frame}{Single Agent Decision Making Under Uncertainty}
+\begin{itemize}
+    \item Not only the agent choice but also random factors affect the agent’s payoff.
+    \item We can think of another fictitious player, which we call "Nature," whose "choices" affect the agent’s payoff.
+    \item Nature chooses a probability distribution over the outcomes, and the probability distribution is conditional on the action chosen by our decision-maker.
+    \item In this class, we will see two cases: Random variables are finite or continuous.
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Example 1}
+Suppose an Investor needs to make an investment decision into one of the two sectors of the economy: Oil $\&$ Gas or Technology. However,  Investor is not sure whether there will be an expansion or recession. The payoffs are in the matrix below. 
+    
+    \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Nature}                                    \\
+\multirow{4}{*}{Investor} &                                    & \multicolumn{1}{l}{Expansion} & \multicolumn{1}{l}{Recession} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Oil $\&$ Gas} & \multicolumn{1}{c|}{100}        & \multicolumn{1}{c|}{-100}   \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Technology}       & \multicolumn{1}{c|}{50}         & \multicolumn{1}{c|}{10}  \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+
+
+Investor is thinking:
+\par 
+\textit{My research team found that there is a $25\%$ chance there will be a recession, and $75\%$ chance there will be an expansion. Given this prediction, which one is the best industry to invest in?}
+\end{frame}
+
+\begin{frame}{Example 1}
+        
+    \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Nature}                                    \\
+\multirow{4}{*}{Investor} &                                    & \multicolumn{1}{l}{Expansion} & \multicolumn{1}{l}{Recession} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Oil $\&$ Gas} & \multicolumn{1}{c|}{100}        & \multicolumn{1}{c|}{-100}   \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Technology}       & \multicolumn{1}{c|}{50}         & \multicolumn{1}{c|}{10}  \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item Investor is thinking:
+\par 
+\textit{My research team found that there is a $25\%$ chance there will be a recession, and $75\%$ chance there will be an expansion. Given this prediction, which one is the best industry to invest in?}
+\item Investor believes that with probably $0.75$ there will be an expansion, and with probability $0.25$ there will be a recession. 
+\item Investor's expected utility from these beliefs are:
+\[EU(\text{Oil } \& \text{ Gas})=0.75 \times 100+0.25 \times (-100)=50.
+\]
+\[EU(\text{Technology})=0.75\times 50 +0.25 \times 10=40.
+\]
+
+\end{itemize}
+\end{frame}
+\begin{frame}{Example 1}
+        
+    \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Nature}                                    \\
+\multirow{4}{*}{Investor} &                                    & \multicolumn{1}{l}{Expansion} & \multicolumn{1}{l}{Recession} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Oil $\&$ Gas} & \multicolumn{1}{c|}{100}        & \multicolumn{1}{c|}{-100}   \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Technology}       & \multicolumn{1}{c|}{50}         & \multicolumn{1}{c|}{10}  \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item Investor is thinking:
+\par 
+\textit{My research team found that there is a $25\%$ chance there will be a recession, and $75\%$ chance there will be an expansion. Given this prediction, which one is the best industry to invest in?}
+\item Investor's expected utility from Oil $\&$ Gas is higher than from Technology, since $EU(\text{Oil } \& \text{ Gas})=50>40=EU(\text{Technology})$.
+\item Therefore,  the best response of the Investor is to invest in Oil $\&$ Gas. 
+
+\end{itemize}
+\end{frame}
+\begin{frame}{Example 1}
+        \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Nature}                                    \\
+\multirow{4}{*}{Investor} &                                    & \multicolumn{1}{l}{Expansion} & \multicolumn{1}{l}{Recession} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Oil $\&$ Gas} & \multicolumn{1}{c|}{100}        & \multicolumn{1}{c|}{-100}   \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Technology}       & \multicolumn{1}{c|}{50}         & \multicolumn{1}{c|}{10}  \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item Now suppose that the Nature chooses Expansion with probability 0.7, and Recession with probability 0.3. What is the best for Investor?
+\item Now suppose that the Nature chooses Expansion with probability 0.5, and Recession with probability 0.5. What is the best for Investor?
+
+\item Now suppose that the Nature chooses Expansion with probability $\frac{11}{16}$, and Recession with probability $\frac{5}{16}$. What is the best for Investor?
+\end{itemize}
+    
+\end{frame}
+\begin{frame}{Expected Payoff: The Finite Case}
+    \begin{itemize}
+        \item The "expected utility theory" was first developed by John von Neumann and Oskar Morgenstern (1944).
+        
+    \end{itemize}
+    \begin{block}{Definition}
+    Let $u(x)$ be the player's payoff function over outcomes in $X=\{x_1, x_2,..., x_n\}$ and let $p=(p_1,p_2, ..., p_n)$ be probability distribution over $X$ such that $p_k=Pr(x=x_k)$.Then we define the player's \textbf{expected utility/payoff} as 
+    \[E[u(x)|p]=\sum_{k=1}^np_ku(x_k)=p_1u(x_1)+p_2u(x_2)+...+p_nu(x_n).
+    \]
+    \end{block}
+\end{frame}
+\begin{frame}{Rationality Revisited}
+\begin{block}{Definition}
+A player facing a decision problem with a payoff function $u(\cdot)$ over outcomes is \textbf{rational} if he chooses an action $a\in A$ that maximizes her expected payoff. 
+\end{block}
+    \begin{itemize}
+        \item The player, who understands the stochastic consequences of each of his/her actions, will choose an action that offers her the highest expected payoff. 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Example 2}
+     \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Nature}                                    \\
+\multirow{4}{*}{Player} &                                    & \multicolumn{1}{l}{Strong} & \multicolumn{1}{l}{Average}& \multicolumn{1}{l}{Weak} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Get MBA} & \multicolumn{1}{c|}{32-10}        & \multicolumn{1}{c|}{16-10}  & \multicolumn{1}{c|}{12-10}   \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Don't get MBA}       & \multicolumn{1}{c|}{12}         & \multicolumn{1}{c|}{8}  & \multicolumn{1}{c|}{4}  \\ \cline{3-5} 
+\end{tabular}
+\end{table}
+
+
+
+\begin{itemize}
+    \item Player is facing a decision whether or not to get MBA, where the cost of getting MBA is 10. 
+    \item Nature decides if the labor market is strong, average or weak. The payoffs are summarized in the table above.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example 2}
+     \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Nature}                                    \\
+\multirow{4}{*}{Player} &                                    & \multicolumn{1}{l}{Strong} & \multicolumn{1}{l}{Average}& \multicolumn{1}{l}{Weak} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Get MBA} & \multicolumn{1}{c|}{22}        & \multicolumn{1}{c|}{6}  & \multicolumn{1}{c|}{2}   \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Don't get MBA}       & \multicolumn{1}{c|}{12}         & \multicolumn{1}{c|}{8}  & \multicolumn{1}{c|}{4}  \\ \cline{3-5} 
+\end{tabular}
+\end{table}
+
+
+
+\begin{itemize}
+    \item Probability that the market is strong is 0.25, probability that market is average is 0.5, and probability that market is weak is 0.25. 
+    
+\end{itemize}
+
+\[Eu(\text{Get MBA})=0.25\times 22+0.5\times 6+0.25\times 2=9,
+\]
+\[Eu(\text{Don't get MBA})=0.25\times 12+0.5\times 8+0.25\times 4=8,
+\]
+
+\bigskip
+Since $Eu(\text{Get MBA})=9>Eu(\text{Don't get MBA})=8$, then the player should get MBA. 
+\end{frame}
+
+\begin{frame}{Expected Payoff: The Continuous Case}
+    \begin{itemize}
+        \item Consider the case in which the outcomes can be any one of a continuum of values distributed on some interval $X$. 
+    \end{itemize}
+    \begin{block}{Definition}
+    Let $u(x)$ be the player's payoff function over the outcomes in the interval $X=[\underline{x}, \overline{x}]$ with a probability distribution given by cumulative distribution $F(x)$, with density $f(x)$. Then we define the player's \textbf{expected payoff} as 
+    \[E[u(x)]=\int_{\underline{x}}^{\overline{x}}u(x)f(x)dx.
+    \]
+    \end{block}
+\end{frame}
+
+\begin{frame}{Example 3: Guessing Game}
+    \begin{itemize}
+        \item Suppose that Nature chooses a number $\omega \in [0,1]$.
+        \item The agent also chooses a number $a \in [0,1]$.
+        \item The agent’s payoff depends on the distance between $a$ and $\omega$.
+        \[u(a,\omega)= -(a-\omega)^2.
+        \]
+        \item Suppose that the agent belief is that Nature chooses according to a uniform distribution, i.e., $F=U[0,1]$.
+        \item What action $a^*$ does the agent choose?
+    \end{itemize}
+    \end{frame}
+
+\begin{frame}{Example 3: Guessing Game}
+\begin{itemize}
+    \item Remember, that for a uniform distribution, $F(x)=x$ for $0\leq x\leq 1$, $F(x)=0$ for $x\leq 0$, $F(x)=1$ for $x\geq 1$, and $f(x)=1$ for $0\leq x\leq 1$, and $f(x)=0$ otherwise.  
+    \item Expected utility will be 
+    \[Eu(a)=\int_0^1-(a-\omega)^2 d\omega=-a^2+a-\frac{1}{3}.
+    \]
+    \item Therefore, the agent should choose the $a\in [0,1]$ such that
+    \[\max_{a\in [0,1]}Eu(a)=-a^2+a-\frac{1}{3}.
+    \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example 3: Guessing Game}
+\begin{itemize}
+   
+    \item The agent should choose the $a\in [0,1]$ such that
+    \[\max_{a\in [0,1]}Eu(a)=-a^2+a-\frac{1}{3}.
+    \]
+    \item FOC: $-2a+1=0 $ $\Rightarrow$ $a^*=\frac{1}{2}$. 
+    \item SOC: $-2<0$, implies we found global maxima. 
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}{ 3 Players Activity}
+    \begin{itemize}
+        \item I need three students volunteers. 
+        \item There are three cards assigned to each student, and the cards are either blue or orange with at least one card being blue.
+        \item I am going to show each student the cards of the other students but I am going to keep their cards hidden. 
+        \item After that, I am going to ask the volunteers a series of questions that will help them determine the color of their own card. 
+        
+    \end{itemize}
+\end{frame}
+\begin{frame}{ 4 Players Activity}
+    \begin{itemize}
+        \item I need four students volunteers. 
+        \item There are four cards assigned to each student, and the cards are either blue or orange with at least one card being blue.
+        \item I am going to show each student the cards of the other students but I am going to keep their cards hidden. 
+        \item After that, I am going to ask the volunteers a series of questions that will help them determine the color of their own card. 
+        
+    \end{itemize}
+\end{frame}
+\begin{frame}{General Example}
+Three friends are seating at a restaurant eating dinner. It is a tradition in this restaurant to put hats on their guests. The hats are either orange or blue  hat. Each friend can see the color of all hats expect of their own. The waiter announces that \textbf{at least one} of the hats is blue. And then says:
+\begin{center}
+    \textit{"If you know you are wearing a blue hat, stand up."}
+\end{center}
+None of the friends stand up. Then, the waiter repeats:
+\begin{center}
+    \textit{"If you know you are wearing a blue hat, stand up."}
+\end{center}
+Again, nobody stands up. Then, the waiter repeats:
+\begin{center}
+    \textit{"If you know you are wearing a blue hat, stand up."}
+\end{center}
+Now all three friends stand up. What are the colors of the hats?
+\end{frame}
+
+\begin{frame}{Dynamic Decisions}
+    \begin{itemize}
+        \item What if choices not only made once but in \textbf{multiple periods?}
+        \item Suppose $T\leq \infty$ periods to make choices.
+        \item The standard assumption is that agents have \textbf{inter-temporal preferences} given by a \textbf{discounted sum of payoffs.} 
+        \item Let $a_t$ be the action taking by the agent at time t.
+        \item Let $\delta$, the \textbf{discount factor}, trades-off payoffs today vs payoffs
+tomorrow.
+    \end{itemize}
+    \[U(a_1, a_2, a_3,...)=u(a_1)+\delta u(a_2)+\delta^2 u(a_3)+...=\sum_{t=1}^\infty \delta^{t-1}u(a_t).
+    \]
+\end{frame}
+
+\begin{frame}{Example 4: Eating a Cake}
+    \begin{itemize}
+        \item An agent has a cake that lasts for two days.
+        \item The utility of eating an amount x of cake on any day is $u(x)=\ln x$, (increasing, concave).
+        \item How should the agent split the cake?
+        \pause 
+        \item The objective is to maximize
+        \[U(x_1, x_2)=u(x_1)+\delta u(x_2) \text{ subject to } x_1+x_2=1.
+        \]
+        \pause 
+\item Taking First Order Condition we get:
+\[u^\prime (x_1)=\delta u^\prime (1-x_1). 
+\]
+\pause
+\item Interpretation: Marginal utility today $u^\prime (x_1)$ must equal the discounted marginal utility tomorrow $\delta u^\prime (1-x_1).$
+    \end{itemize}
+\end{frame}
+\begin{frame}{Dynamic Decisions}
+    \begin{itemize}
+        \item Commitment vs no commitment.
+           \par \textbf{Commitment:} Making an action plan and not change it regardless of the outcome over time.
+           \par \textbf{No-Commitment:} Freedom to revise the action plan.
+        \item To solve a dynamic problem, the agent must consider what he/she will do tomorrow in order to make the right choice today.
+   
+    \end{itemize}
+\end{frame}
+\begin{frame}{Summary}
+    \begin{itemize}
+        \item Single agent problems are "math" problems (optimization).
+     \item In case of Uncertainty, rational players will choose action that offers them the highest expected payoff. 
+     \item When decisions need to be made over time, a rational player will solve the problem "backwards" so that early decisions take into account later decisions. 
+     \item \textbf{Reading for the next class: Tadelis, "Game Theory", Chapter 3, pages 43-57.}
+        
+    \end{itemize}
+\end{frame}
+\begin{frame}{Example 5: Homework}
+    Consider the getting MBA game from Example 2:
+     \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Nature}                                    \\
+\multirow{4}{*}{Player} &                                    & \multicolumn{1}{l}{Strong} & \multicolumn{1}{l}{Average}& \multicolumn{1}{l}{Weak} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Get MBA} & \multicolumn{1}{c|}{22}        & \multicolumn{1}{c|}{6}  & \multicolumn{1}{c|}{2}   \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Don't get MBA}       & \multicolumn{1}{c|}{12}         & \multicolumn{1}{c|}{8}  & \multicolumn{1}{c|}{4}  \\ \cline{3-5} 
+\end{tabular}
+\end{table}
+
+
+
+\begin{itemize}
+    \item Now suppose that the probability that the market is strong is 0.2, probability that market is average is 0.6, and probability that market is weak is 0.2. Should the player get MBA?
+     \item What if the probability that the market is strong is 0.3, probability that market is average is 0.4, and probability that market is weak is 0.3. Should the player get MBA in this case?
+     \item Solve Exercise 2.1 from Tadelis, "Game Theory", Pages 33-34.
+\end{itemize}
+
+\end{frame}
+\begin{frame}{Example 6: Homework}
+    \begin{itemize}
+    \item Reconsider Example 3, The Guessing Game. 
+        \item However, suppose that Nature chooses a number $\omega \in [0,2]$.
+        \item The agent also chooses a number $a \in [0,2]$.
+        \item The agent’s payoff depends on the distance between $a$ and $\omega$.
+        \[u(a,\omega)= -(a-\omega)^2.
+        \]
+        \item Suppose that the agent belief is that Nature chooses according to a uniform distribution, i.e., $F=U[0,2]$.
+        \item What action $a^*$ does the agent choose?
+    \end{itemize}
+\end{frame}
+\begin{frame}{Example 7: Homework}
+    \begin{itemize}
+        \item Solve Exercise 2.13  from Tadelis, "Game Theory", Page 40.
+        \item In addition, solve part (a)  for the case when $u(x)=x.$ Is your answer different from the logarithmic utility case?
+       \item Solve part (b)  for the case when $u(x)=x.$ Is your answer different from the logarithmic utility case?
+    \end{itemize}
+    
+    \textbf{Hint: } To solve the question, you need to set up the Lagrangian:
+
+\[L=ln(x_1)+\delta \ln(x_2)+\delta^2  \ln(x_3)-\lambda [x_1+x_2+x_3-100]\]
+
+FOC: with respect to $x_1$: 
+
+FOC: with respect to $x_2$:
+
+FOC: with respect to $x_3$:
+
+Solve this to get rid of $\lambda$, and you are done with the first part.
+
+The case of $u(x)=x$ is tricky, use the fact that $\delta=0.9<1$.
+\end{frame}
+\end{document}
