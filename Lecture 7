@@ -1,0 +1,563 @@
+\documentclass{beamer}
+
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+\setbeamercovered{highly dynamic}
+\newcounter{saveenumi}
+\newcommand{\seti}{\setcounter{saveenumi}{\value{enumi}}}
+\newcommand{\conti}{\setcounter{enumi}{\value{saveenumi}}}
+
+\title{\textsc{Econ 437: Game Theory}}
+
+
+\subtitle{Lecture 7: Iterated Elimination of Strictly Dominated Strategies} 
+\author{Instructor:  Mariam Arzumanyan}
+
+
+\date[UIUC, Fall 2021]{University of Illinois at Urbana-Champaign \\September  14, 2021 }
+
+
+\subject{Lecture Session}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+\pgfdeclareimage[height=0.7cm]{Illinilogo}{Illinilogo.png}
+\logo{\pgfuseimage{Illinilogo}} 
+% Let's get started
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+\begin{frame}{Introduction}
+    \begin{itemize}
+        \item Last class, we studied a new solution concept: strict and weak dominance.
+        \item A strategy strictly (weakly)  dominates another strategy if the payoff from that strategy is strictly (weakly) higher than the payoff from the other strategy no matter what the opponents do. 
+        
+        \item Suggested Reading: Tadelis, "Game Theory",  pages 59-76.
+       % \item Please have your \textbf{Video on} and \textbf{Sound Muted}. 
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Question 1}
+  \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                    \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{Left} & \multicolumn{1}{l}{Middle} &\multicolumn{1}{l}{Right} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Up} & \multicolumn{1}{c|}{0,1}        &\multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{0, 2}    \\ \cline{3-5} 
+                         
+                          & \multicolumn{1}{l|}{Middle}       &\multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{2,0}         & \multicolumn{1}{c|}{1,1}  \\ \cline{3-5} 
+                           & \multicolumn{1}{l|}{Down}       &\multicolumn{1}{c|}{0,1}        & \multicolumn{1}{c|}{0,0}         & \multicolumn{1}{c|}{1,1}  \\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\begin{enumerate}
+    \item Does Player 1 have any strictly dominated strategies? Does Player 1 have any weakly dominated strategies? 
+    \item Does Player 2 have any strictly dominated strategies? Does Player 2 have any weakly dominated strategies? 
+    \item Is there a strictly dominant strategy equilibrium? Is there a weakly dominant strategy equilibrium?
+\end{enumerate}
+\end{frame}
+\begin{frame}{Answer 1}
+  \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                    \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{Left} & \multicolumn{1}{l}{Middle} &\multicolumn{1}{l}{Right} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Up} & \multicolumn{1}{c|}{0,1}        &\multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{0, 2}    \\ \cline{3-5} 
+                         
+                          & \multicolumn{1}{l|}{Middle}       &\multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{2,0}         & \multicolumn{1}{c|}{1,1}  \\ \cline{3-5} 
+                           & \multicolumn{1}{l|}{Down}       &\multicolumn{1}{c|}{0,1}        & \multicolumn{1}{c|}{0,0}         & \multicolumn{1}{c|}{1,1}  \\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\begin{enumerate}
+    \item Player 1's pure strategy Up is strictly dominated. Player 1's strategy Down is weakly dominated. 
+    \item Player 2's pure strategy Middle is strictly dominated. Player 2's strategy Left is weakly dominated.
+    \item There are no strictly dominant strategy equilibrium. (Middle, Right) is a weakly dominant strategy equilibrium.
+\end{enumerate}
+\end{frame}
+\begin{frame}{Question 2}
+  \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                    \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{Left} & \multicolumn{1}{l}{Middle} &\multicolumn{1}{l}{Right} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Up} & \multicolumn{1}{c|}{2,2}        &\multicolumn{1}{c|}{5,5}        & \multicolumn{1}{c|}{0,0}    \\ \cline{3-5} 
+                         
+                          & \multicolumn{1}{l|}{Middle}       &\multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{2,2}         & \multicolumn{1}{c|}{1,1}  \\ \cline{3-5} 
+                           & \multicolumn{1}{l|}{Down}       &\multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{0,0}         & \multicolumn{1}{c|}{4,4}  \\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\begin{enumerate}
+    \item Does Player 1 have any strictly dominated strategies? Does Player 1 have any weakly dominated strategies? 
+    \item Does Player 2 have any strictly dominated strategies? Does Player 2 have any weakly dominated strategies? 
+    \item Is there a strictly dominant strategy equilibrium? Is there a weakly dominant strategy equilibrium?
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Answer 2}
+  \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                    \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{Left} & \multicolumn{1}{l}{Middle} &\multicolumn{1}{l}{Right} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Up} & \multicolumn{1}{c|}{2,2}        &\multicolumn{1}{c|}{5,5}        & \multicolumn{1}{c|}{0,0}    \\ \cline{3-5} 
+                         
+                          & \multicolumn{1}{l|}{Middle}       &\multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{2,2}         & \multicolumn{1}{c|}{1,1}  \\ \cline{3-5} 
+                           & \multicolumn{1}{l|}{Down}       &\multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{0,0}         & \multicolumn{1}{c|}{4,4}  \\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\begin{enumerate}
+    \item Player 1's pure strategy Middle is strictly dominated by a mixed strategy of (Up, Down) with probabilities $(\frac{2}{3}, \frac{1}{3})$.  Player 1 has no weakly dominated strategies. 
+    \item Player 2's pure strategy Left is strictly dominated by a mixed strategy of (Middle, Right) with probabilities $(\frac{1}{2}, \frac{1}{2})$. Player 2 has no  weakly dominated strategies. 
+    \item There are no strictly dominant strategy equilibrium. There are no weakly dominant strategy equilibrium.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Iterated Elimination of Strictly Dominated Pure Strategies}
+  
+\begin{table}[]
+\centering
+
+\label{my-label}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Criminal 2}                                    \\
+\multirow{4}{*}{Criminal 1} &                                    & \multicolumn{1}{l}{Quiet} & \multicolumn{1}{l}{Fink} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Quiet} & \multicolumn{1}{c|}{-1,-1}        & \multicolumn{1}{c|}{-4,0}   \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Fink}       & \multicolumn{1}{c|}{0,-4}         & \multicolumn{1}{c|}{-3,-3}  \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item The prisoners' dilemma game is very easy to solve: both players have strictly dominant strategies. 
+    \item It only requires \textbf{rationality} of each player.
+    \item A player that has a strictly dominant strategy \textbf{does not care } what her rivals are playing. 
+    \item However, players do not always have a strictly dominant strategy. 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Iterated Elimination of Strictly Dominated Pure Strategies}
+  
+\begin{table}[]
+\centering
+
+\label{my-label}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Criminal 2}                                    \\
+\multirow{4}{*}{Criminal 1} &                                    & \multicolumn{1}{l}{Quiet} & \multicolumn{1}{l}{Fink} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Quiet} & \multicolumn{1}{c|}{-1,-1}        & \multicolumn{1}{c|}{-4,0}   \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Fink}       & \multicolumn{1}{c|}{0,-4}         & \multicolumn{1}{c|}{-3,-3}  \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item The prisoners' dilemma game is very easy to solve: both players have strictly dominant strategies. 
+    \item It only requires \textbf{rationality} of each player.
+    \item A player that has a strictly dominant strategy \textbf{does not care } what her rivals are playing. 
+    \item However, players do not always have a strictly dominant strategy. 
+    \item A rational player will never play a strictly dominated strategy.
+    \item \textbf{Common knowledge:} We can iteratively eliminate strictly dominated strategies. 
+\end{itemize}
+\end{frame}
+\begin{frame}{Iterated Elimination of Strictly Dominated Pure Strategies}
+    \begin{enumerate}
+        \item We are going to start with the original game. 
+        \item We check if there are any players who have strictly dominated strategies. 
+        \item For all players, we remove any strategies that are strictly dominated. Define a new game with strategy sets that do not include the strictly dominated strategies that have been removed. 
+        \item For the new game, we again check if there are any players who have strictly dominated strategies and remove them. 
+        \item We continue this process until there are no more strictly dominated strategies left. 
+        \item The strategies that survive this elimination process form the
+    \end{enumerate}
+    \textbf{Equilibrium in Iterated Elimination of Strictly Dominated Strategies (IESDS).}
+\end{frame}
+\begin{frame}{Iterated Elimination of Strictly Dominated Pure Strategies}
+       \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{2,4}        & \multicolumn{1}{c|}{1,3}
+                           & \multicolumn{1}{c|}{5,1}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{5,1}        & \multicolumn{1}{c|}{2,2}
+                           & \multicolumn{1}{c|}{3,1}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{3,3}         & \multicolumn{1}{c|}{1,4}   & \multicolumn{1}{c|}{1,5}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item In this game, player 1's strategy D is strictly dominated by M, and therefore it should be eliminated.
+\end{itemize}
+
+   \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{2,4}        & \multicolumn{1}{c|}{1,3}
+                           & \multicolumn{1}{c|}{5,1}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{5,1}        & \multicolumn{1}{c|}{2,2}
+                           & \multicolumn{1}{c|}{3,1}\\ \cline{3-5}
+                           
+\end{tabular}
+\end{table}
+\end{frame}
+\begin{frame}{Iterated Elimination of Strictly Dominated Pure Strategies}
+
+   \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{2,4}        & \multicolumn{1}{c|}{1,3}
+                           & \multicolumn{1}{c|}{5,1}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{5,1}        & \multicolumn{1}{c|}{2,2}
+                           & \multicolumn{1}{c|}{3,1}\\ \cline{3-5}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item In this game, player 2's strategy R is strictly dominated by M, and therefore should be eliminated. 
+    
+\end{itemize}
+  \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{2,4}        & \multicolumn{1}{c|}{1,3}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{5,1}        & \multicolumn{1}{c|}{2,2}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\end{frame}
+\begin{frame}{Iterated Elimination of Strictly Dominated Pure Strategies}
+     \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{2,4}        & \multicolumn{1}{c|}{1,3}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{5,1}        & \multicolumn{1}{c|}{2,2}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item In this game, player 1's strategy U is strictly dominated by M, and therefore should be eliminated.
+\end{itemize}
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{3}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M}  \\ \cline{3-4} 
+                          
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{5,1}        & \multicolumn{1}{c|}{2,2}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\end{frame}
+\begin{frame}{Iterated Elimination of Strictly Dominated Pure Strategies}
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{3}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M}  \\ \cline{3-4} 
+                          
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{5,1}        & \multicolumn{1}{c|}{2,2}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item In this game, player 2's strategy L is strictly dominated by M, and therefore it should be eliminated.
+\end{itemize}
+  \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clc}
+\multicolumn{1}{l}{}                     & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{3}{*}{Player 1} &                                    &  \multicolumn{1}{l}{M}  \\ \cline{3-3} 
+                          
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{2,2}
+                           \\ \cline{3-3}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item In this game, the iterated process of eliminating dominated strategies yields a unique prediction: we expect player 1 to play M, and player 2 to play M. 
+\end{itemize}
+\end{frame}
+\begin{frame}{Iterated Elimination of Strictly Dominated Pure Strategies}
+\begin{itemize}
+    \item The process of \textbf{iterated elimination of strictly dominated strategies} uses the assumption of common knowledge and rationality.
+\end{itemize}
+\begin{block}{Definition}
+Any strategy profile that survives the process of iterated elimination of strictly dominated strategies is an \textbf{iterated elimination equilibrium.}
+\end{block}
+In the previous example, there was a unique iterated elimination equilibrium. However, there might be multiple strategies that survive elimination of strictly dominated strategies. 
+\end{frame}
+\begin{frame}{Iterated Elimination of Strictly Dominated Pure Strategies}
+  \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{Left} & \multicolumn{1}{l}{Middle} & \multicolumn{1}{l}{Right} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Up} & \multicolumn{1}{c|}{4,4}        & \multicolumn{1}{c|}{0,0}
+                           & \multicolumn{1}{c|}{-1,-1}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Middle}       & \multicolumn{1}{c|}{0,0}         & \multicolumn{1}{c|}{4,4}   & \multicolumn{1}{c|}{1,1}\\ \cline{3-5} 
+                           & \multicolumn{1}{l|}{Down} & \multicolumn{1}{c|}{-1,-1}        & \multicolumn{1}{c|}{1,1}
+                           & \multicolumn{1}{c|}{-1,-1}\\ \cline{3-5}
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item In this game, the strategies Down for player 1, and Right for player 2 are strictly dominated, and therefore should be eliminated. 
+\end{itemize}
+     \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{3}{*}{Player 1} &                                    & \multicolumn{1}{l}{Left} & \multicolumn{1}{l}{Middle}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Up} & \multicolumn{1}{c|}{4,4}        & \multicolumn{1}{c|}{0,0}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Middle}       &
+                          \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{4,4}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\end{frame}
+\begin{frame}{Iterated Elimination of Strictly Dominated Pure Strategies}
+   \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{3}{*}{Player 1} &                                    & \multicolumn{1}{l}{Left} & \multicolumn{1}{l}{Middle}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Up} & \multicolumn{1}{c|}{4,4}        & \multicolumn{1}{c|}{0,0}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Middle}       &
+                          \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{4,4}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item This game has 4 strategy profiles that survive the iterated elimination of strictly dominated strategies. 
+    \item (Up, Left), (Up, Middle), (Middle, Left) and (Middle, Middle) are \textbf{iterated-elimination equilibria}. 
+\end{itemize}
+\end{frame}
+\begin{frame}{Example 2: Homework}
+\begin{itemize}
+    \item Find all \textbf{iterated-elimination equilibria} for the following games. Write down your intuition why answers might differ.
+    
+\end{itemize}
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} &
+                           \multicolumn{1}{c|}{4,4}         & \multicolumn{1}{c|}{2,5}   & \multicolumn{1}{c|}{1,5}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{6,2}        & \multicolumn{1}{c|}{3,3}
+                           & \multicolumn{1}{c|}{4,2}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{3,5}        & \multicolumn{1}{c|}{2,4}
+                           & \multicolumn{1}{c|}{6,1}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} &
+                           \multicolumn{1}{c|}{4,4}         & \multicolumn{1}{c|}{2,5}   & \multicolumn{1}{c|}{1,5}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{6,3}        & \multicolumn{1}{c|}{3,3}
+                           & \multicolumn{1}{c|}{4,2}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{3,5}        & \multicolumn{1}{c|}{2,4}
+                           & \multicolumn{1}{c|}{6,1}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Guessing Two-Thirds of the Average}
+Every player announces an integer from 0 to 100. The player whose integer
+is closest to $\frac{2}{3}$ of the average of the integers wins the game.
+\bigskip
+
+\begin{itemize}
+\item Every participant will receive 1 extra credit. 
+\item The winner gets two extra credits. 
+\item To participate in this activity, click on the link below.
+ 
+\end{itemize}
+\href{https://forms.gle/HKAoJsMf1DXpNqFZ8}{https://forms.gle/HKAoJsMf1DXpNqFZ8}
+
+    
+\end{frame}
+
+
+\begin{frame}{Guessing Two-Thirds of the Average}
+Every player announces an integer from 0 to 100. The player whose integer
+is closest to $\frac{2}{3}$ of the average of the integers wins the game.
+\bigskip
+
+\begin{itemize}
+\item All numbers are less than or equal to 100, so the $\frac{2}{3}$ of the average can never exceed 66. 
+\item Then, nobody should pick a number above 66. 
+\item But, then, $\frac{2}{3}$ of the average would not exceed 44, and so nobody should pick a number above 44. 
+\item Following this argument iteratively...
+\item Equilibrium in IESDS is unique and it is 0. 
+\end{itemize}
+
+
+    
+\end{frame}
+
+\begin{frame}{K-Level Thinking}
+    \begin{itemize}
+        \item K-Level thinking refers to the number of repeated iterations players do.
+        \item At K-0 level, players guess numbers randomly. 
+        \item At K-1 level, players assume that everyone else is playing at K-0 level, and therefore the expected average is 50, and so two thirds will be 33. 
+        \item At K-2 level, players assume that everyone is at K-1 level, and therefore they will guess 22. 
+        \item 0 is reached at K-12 reasoning. 
+        \item Behavioral Economics research indicates that most players stop after 1 or 2 iterations. 
+        
+    \end{itemize}
+    \href{https://www.youtube.com/watch?v=MknV3t5QbUc&list=LLNcyzpdeOBRkhPzCi2K9CCA&index=3&t=0s}{Link to YouTube Video}
+\end{frame}
+\begin{frame}{Example: Cournot Duopoly}
+\begin{itemize}
+    \item Two firms maximize profits and choose quantities $q_i\geq 0$.
+    \item Inverse demand: $p(q)=100-q$, if $q=q_1+q_2\leq 100$, and $p(q)=0$ otherwise.
+    \item Production cost: $c_i(q_i)=10q_i$. 
+\end{itemize}
+    \textbf{Firm i's profits:}
+    \[\pi_i(q_i, q_j)=p(q_1+q_2)\cdot q_i-c_i(q_i)
+    \]
+    \[=(100-q_i-q_j)\cdot q_i-10q_i\]
+    \[=(100-q_i-q_j)\cdot q_i.
+    \]
+    
+
+
+    
+\end{frame}
+
+\begin{frame}{Example: Cournot Duopoly}
+\includegraphics[scale=0.6]{Cournot.PNG}
+\end{frame}
+
+\begin{frame}{Example: Cournot Duopoly}
+\begin{itemize}
+    \item Original strategy space is $[0, \infty)$.
+    \item Since $q_i^*=\frac{90-q_j}{2}$ and $q_j\geq 0$, then $q_i^*\leq 45$.
+    \item Both players know this. The new strategy space is $[0,45]$.
+     \item  $q_i^*=\frac{90-q_j}{2}$ and  $q_j\leq 45$, then $q_i^*\geq 22.5$.
+     \item Both players know this. The new strategy space is $[22.5,45]$.
+     \item  $q_i^*=\frac{90-q_j}{2}$ and  $q_j\geq 22.5$, then $q_i^*\leq 33.75$. 
+        \item Both players know this. The new strategy space is $[22.5, 33.75]$.
+        \item This process continues infinitely, and in the limit, $q_i^*=q_j^*=30$.
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Summary}
+\begin{itemize}
+    \item Rational players will never play a strictly dominated strategy and will always play a strictly dominant strategy when it exists. 
+    \item Iterated elimination of strictly dominated strategies eliminates all non-reasonable outcomes of the game. 
+   % \item  Assignment 1 is due next \textbf{Monday, February 15th, 11:59 pm}.
+\end{itemize}
+\end{frame}
+
+\end{document}
