@@ -1,0 +1,423 @@
+\documentclass{beamer}
+
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+\setbeamercovered{highly dynamic}
+\newcounter{saveenumi}
+\newcommand{\seti}{\setcounter{saveenumi}{\value{enumi}}}
+\newcommand{\conti}{\setcounter{enumi}{\value{saveenumi}}}
+
+\title{\textsc{Econ 437: Game Theory}}
+
+
+\subtitle{Lecture 10: Infinite Games} 
+\author{Instructor:  Mariam Arzumanyan}
+
+
+\date[UIUC, Fall 2021]{University of Illinois at Urbana-Champaign \\September 23, 2021}
+
+
+\subject{Lecture Session}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+\pgfdeclareimage[height=0.7cm]{Illinilogo}{Illinilogo.png}
+\logo{\pgfuseimage{Illinilogo}} 
+% Let's get started
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Introduction}
+ \begin{itemize}
+        \item We studied Nash equilibrium and its properties for various finite games. 
+        \item Nash (1950) proves that every finite player finite-strategy game has a Nash equilibrium, and since it is self-enforcing, it is a key solution concept used by game theorists. 
+        \item Today, we are going to see Nash equilibrium applications in games where each player has infinitely many strategies to play. 
+        \item The classical examples are monopolistic competition and oligopolistic competition. 
+        \item Suggested Reading: Tadelis, "Game Theory",  pages 83-95.
+    \end{itemize}
+    
+\end{frame}
+\begin{frame}{Perfect Competition World}
+\begin{itemize}
+    \item In microeconomics theory, the underlying assumption is perfect competition. 
+    \item There exists perfectly competitive markets, where consumers meet their demands, and firms supply their output. 
+    \item Consider inverse consumer demand with $p(q)=100-q$, if $q<100$, and $p(q)=0$ if $q\geq 100$. Firms do not have fixed cost, and their variable cost is $c(q)=cq$. 
+    \item In perfect competition world, the price will be equal
+    \begin{equation*}
+        p^{CE}=c,
+    \end{equation*}
+    and the quantity produced in the economy is
+    \begin{equation*}
+        q^{CE}=100-c.
+    \end{equation*}
+\end{itemize}
+    \end{frame}
+\begin{frame}{Perfect Competition World}
+\begin{itemize}
+    \item Perfect competition theory is a foundation for modeling firm behavior, it gives a very good intuition, and it is widely used. 
+    \item However, it is far from being realistic. 
+    \item Assumptions are that goods are identical, consumers are identical, and firms produce identical products. 
+    \item The key assumptions that we discuss today is that there are infinitely many firms who have zero market power, cannot affect demand and price. 
+    \item Today, we discuss the case when there are finitely many firms competing. It  is called \textbf{Monopolistic Competition} when a single firm produces the good, and \textbf{Oligopolistic Competition } when multiple. 
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Monopolistic Competition}
+\begin{itemize}
+    \item Assume there is a single firm producing an output q, with a variable cost $c(q)=cq$. 
+    
+    \item  Inverse consumer demand is $p(q)=100-q$, if $q<100$, and $p(q)=0$ if $q\geq 100$.
+\item Firm is profit maximizing, and it has market power over both price and quantity. 
+\item Firm's profit is: 
+\[\pi(q)= p(q)\times q-cq=(100-q)q-cq.
+\]
+
+\end{itemize}
+ 
+    \end{frame}
+
+\begin{frame}{Monopolistic Competition}
+Firm will choose output $q$ such that 
+\[\max_{q}(100-q)q-cq
+\]
+\textbf{FOC:} $ 100-q-q-c=0$. And therefore, $q^M=\frac{100-c}{2}$.
+\par
+Notice that \[ q^{CE}=100-c > q^M =\frac{100-c}{2}.\]
+
+In monopolistic competition price is higher than in Competitive markets:
+\[p^M>p^{CE}.
+\]
+\end{frame}
+
+\begin{frame}{Oligopolistic Competition: Cournot Duopoly}
+\begin{itemize}
+    \item If there are more than one firms in the economy, then there is a competition between those firms. 
+    \item The assumption is that firms are producing identical output. 
+    \item However, there are two types of competition: price or quantity. 
+    \item When firms compete on price, we call it Bertrand Competition. When competition is on quantity produced, we call it Cournot Competition. 
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Oligopolistic Competition: Cournot Duopoly}
+
+    Consider Cournot Duopoly example with demand $p(q)=100-q$, if $q<100$, and $p(q)=0$ if $q\geq 100$, and $q=q_1+q_2$. The costs of both firms are $c_1(q_1)=cq_1$, $c_2(q_2)=cq_2$. Firms are competing on quantity.
+
+\par
+Consider the  profit function of firm 1:
+\[\pi_1(q_1,q_2)=(100-q_1-q_2)q_1-cq_1= 100 q_1-q_1^2-q_1q_2- cq_1.
+\]
+If firm 2 chooses to produce $q_2$ amount, then firm 1 would choose $q_1$ that maximizes profits. Firm 1 solves, 
+\[\max_{q_1}100q_1-q_1^2-q_1q_2-cq_1.
+\]
+FOC: $100-2q_1-q_2-c=0$. 
+
+
+Therefore the best response is solving first order condition. 
+\[q_1=\frac{100-q_2-c}{2}.
+\]
+\end{frame}
+
+\begin{frame}{Oligopolistic Competition: Cournot Duopoly}
+
+ 
+
+\par
+Let's consider the  profit function of firm 2:
+\[\pi_2(q_1,q_2)=(100-q_1-q_2)q_2-cq_2= 100 q_2-q_1q_2-q_2^2- cq_2.
+\]
+If firm 1 chooses to produce $q_1$ amount, then firm 2 would choose $q_2$ that maximizes profits. Firm 2 solves, 
+\[\max_{q_2}100q_2-q_2^2-q_1q_2-cq_2.
+\]
+FOC: $100-2q_2-q_1-c=0$. 
+
+
+Therefore the best response is solving first order condition. 
+\[q_2=\frac{100-q_1-c}{2}.
+\]
+\end{frame}
+
+\begin{frame}{Oligopolistic Competition: Cournot Duopoly}
+The best response of firm 1 is
+\[q_1=\frac{100-q_2-c}{2}.
+\]
+and the best response of firm 2 is
+\[q_2=\frac{100-q_1-c}{2}.
+\]
+To find Nash equilibrium, we need to solve the system of equations with $q_1$ and $q_2$. 
+\[\begin{cases}q_1=\frac{100-q_2-c}{2}, \\ q_2=\frac{100-q_1-c}{2}.
+
+\end{cases}
+\]
+\end{frame}
+
+\begin{frame}{Oligopolistic Competition: Cournot Duopoly}
+\[\begin{cases}q_1=\frac{100-q_2-c}{2}, \\ q_2=\frac{100-q_1-c}{2}.
+
+\end{cases}
+\] 
+Plus the value of $q_2$ into the equation of $q_1$:
+\[q_1=\frac{100-q_2-c}{2}=\frac{100-\frac{100-q_1-c}{2}-c}{2}=25+\frac{q_1}{4}-\frac{c}{4}.
+\]
+Solving, we have
+\[ q_1^{CD}=\frac{100-c}{3}. 
+\]
+\[ q_2^{CD}=\frac{100-c}{3}. 
+\]
+\end{frame}
+
+\begin{frame}{Oligopolistic Competition: Cournot Duopoly}
+The total output produced in this economy is:
+\[Q^{CD}= q_1^{CD}+q_2^{CD}=\frac{100-c}{3}+\frac{100-c}{3}=\frac{2}{3}(100-c). 
+\]
+Notice the following inequalities:
+\[ q^{CE}=100-c > Q^{CD}=\frac{2}{3}(100-c)>  q^M =\frac{100-c}{2}.\]
+Cournot Duopoly produces less output then perfect competition economy, however, it produces more than monopoly. Similarly,
+
+\[p^M>p^{CD}>p^{CE}.
+\]
+\end{frame}
+
+\begin{frame}{Oligopolistic Competition: Cournot Duopoly}
+\[ q^{CE}> Q^{CD}>  q^M .\]
+
+\[p^M>p^{CD}>p^{CE}.
+\]
+\begin{itemize}
+    \item Consumers are better of with more competition. 
+    \item As you can tell, when we added second firm, the output went up, and price went down. This is a result of two firms competing against each other. 
+    \item Cournot (1838) anticipated firms to play Nash equilibrium. Cournot competition theory is one of the cornerstones of the theory of industrial organization. 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Oligopolistic Competition: Cournot Oligopoly}
+\begin{itemize}
+    \item In general, when there are $n$-firms, the quantity produced by each firm is:
+    \[q^{CO}=\frac{1}{n+1}(100-c),
+    \]
+    \item The total output in the economy is 
+    \[Q^{CO}=\frac{n}{n+1}(100-c).
+    \]
+    \item The more firms there are, the higher is the output produced, and the lower prices. 
+    \item More generally, when the number of firms tends to infinity, Cournot outcome becomes competitive. 
+    \[ \lim Q^{CO}=\frac{n}{n+1}(100-c)\rightarrow  (100-c)=q^{CE}, \text{ as } n\rightarrow \infty.
+    \]
+    
+\end{itemize}
+
+\end{frame}
+\begin{frame}{Extra Credit Activity, 1 point}
+  \centering
+    \href{https://bit.ly/3znXVmg}{https://bit.ly/3znXVmg}
+        \bigskip
+        
+    \begin{enumerate}
+        \item Using your smartphone or computer, access the google form above. 
+      
+        \item Each student can manufacture a product that costs c = $\$100$.  \item There is a buyer who is  willing to pay up to $\$1000$ to buy the product.
+        \item The buyer will buy from the seller with the lowest price.
+        \item How much would you charge for the product? 
+        \item The winner will get $2+5\times \pi$ extra points. Everyone else will get 1 points.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Bertrand Duopoly}
+\begin{itemize}
+    \item The Cournot model assumed that the firms choose quantities and the market price comes from consumer demand. 
+    \item Bertrand (1883) argue that firms often set prices and consumers choose from where they will purchase based on prices. 
+    \item Firms produce identical goods, and each firm posts a price. 
+    \item Consumers buy from the firm that offers lowest price.
+    
+\end{itemize}
+    \end{frame}
+
+\begin{frame}{Bertrand Duopoly}
+Assume that the inverse demand is given by $p=100-q$, and cost functions are $c_i(q_i)=cq_i$. Consumers buy from the firm whose price is the lowest. In case of a tie, market splits equally between two firms. 
+\par 
+The normal-form representation of the game:
+ \begin{enumerate}
+        \item \textbf{Players:} $N=\{1,2\}$.
+        \item \textbf{Actions:} $S_1=S_2=[0,\infty)$, and firms choose prices $p_1$, $p_2$.
+        \item Given our assumption, the quantities are given: 
+        $$q_1(p_1,p_2)=\begin{cases} 100-p_1, & \text{ if } p_1<p_2,  \\
+        0 , & \text{ if }p_1>p_2, \\
+        \frac{100-p_1}{2}, & \text{ if } p_1=p_2.
+        \end{cases}$$
+         $$q_2(p_1,p_2)=\begin{cases} 100-p_2, & \text{ if } p_2<p_1,  \\
+        0 , & \text{ if }p_2>p_1, \\
+        \frac{100-p_2}{2}, & \text{ if } p_1=p_2.
+        \end{cases}$$
+    \end{enumerate}
+
+\end{frame}
+
+
+\begin{frame}{Bertrand Duopoly}
+
+ \begin{enumerate}
+       \item Therefore, the profit of each firm will be
+        $$\pi_1(p_1,p_2)=\begin{cases} (100-p_1)(p_1-c), & \text{ if } p_1<p_2,  \\
+        0 , & \text{ if }p_1>p_2, \\
+        \frac{100-p_1}{2}(p_1-c), & \text{ if } p_1=p_2.
+        \end{cases}$$
+         $$\pi_2(p_1,p_2)=\begin{cases} (100-p_2)(p_2-c), & \text{ if } p_2<p_1,  \\
+        0 , & \text{ if }p_2>p_1, \\
+        \frac{100-p_2}{2}(p_2-c), & \text{ if } p_1=p_2.
+        \end{cases}$$
+    \end{enumerate}
+
+\end{frame}
+\begin{frame}{Bertrand Duopoly}
+    \begin{block}{Proposition}
+    There is a unique Nash equilibrium in this game: $p_1=p_2=c$.
+    \end{block}
+    \textbf{Proof:} First note that in any equilibrium $p_i\geq c$ for both firms - otherwise firm offering a price lower than c will lose money. We need to show that $p_i>c$ cannot be part of any equilibrium. We can see this in two steps:
+    \begin{enumerate}
+        \item If $p_1=p_2=\hat p>c$ then each would benefit from lowering its price to some price $\hat p-\varepsilon$ ($\varepsilon$ very small) and get the whole market for almost the same price.
+        \item If $p_1> p_2 \geq c$ then player 2 would want to deviate to $p_1-\varepsilon$ ($\varepsilon$ very small) and earn higher profits. 
+    \end{enumerate}
+    
+\end{frame}
+
+\begin{frame}{Bertrand Duopoly}
+    \begin{itemize}
+        \item It's intuitive why $p_1=p_2=c$ is an equilibrium: Firm $i$'s best response to $p_j=c$ is $p_i(c)\geq c$. 
+        \item Any price at or above marginal costs c is a best response to the other player charging c.
+        \item Hence, $p_1=p_2=c$ is the equilibrium because each is playing a best response to the other's choice and neither wants to deviate to a different price. 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Bertrand Duopoly}
+    \begin{itemize}
+        \item Remember that competitive price was $p^{CE}=c$. 
+        \item We showed that when firms are competing in prices, then market behaves like in case of perfect competition, prices being $p_1=p_2=c$. 
+        \item Note that if we add third, fourth or many firms this will not change the outcome, the prices still will be $c$.
+        \item This is not the case for Cournot competition, in which firms manage to obtain some market power as long as the number of firms is not too large. 
+        
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Example 1: Homework}
+    \textbf{Competitive Equilibrium}
+    \par 
+ Remember that in competitive equilibrium we have marginal revenue ($MR$) is equal to marginal cost ($MC$). Firm revenue is equal $p\times q$, and cost is equal  $c(q)=c\times q$. In this case we have that 
+\[ MR= p, \text{ and } MC=c. 
+\]
+
+Therefore, $p^{CE}=c$. 
+\par 
+ Now suppose,  inverse consumer demand is $p(q)=250-q$, if $q<250$, and $p(q)=0$ if $q\geq 250$ and variable cost is  $c(q)=20\times q$. Find competitive price ($p^{CE}$) and output ($q^{CE}$). \textbf{Hint:} Use consumer demand function $q(p)$.
+
+\end{frame}
+
+\begin{frame}{Example 2: Homework}
+    \textbf{Monopolistic Competition}
+\par
+Assume there is a single firm producing an output q, with a variable cost $c(q)=20\times q$. 
+      Inverse consumer demand is $p(q)=250-q$, if $q<250$, and $p(q)=0$ if $q\geq 250$.
+ Firm is profit maximizing, and it has market power over both price and quantity. 
+ \begin{enumerate}
+     \item Find consumer demand function $q(p)$. 
+     \item Find firm's profit function $\pi(q)$.
+     \item Define firm's maximization problem. 
+     \item Find the first order conditions. 
+     \item Find monopoly price ($p^M$) and output ($q^M$). \textbf{Hint:} Either use consumer demand, or inverse demand. 
+     \item Compare monopoly prices and output to competitive ones.
+     
+ \end{enumerate}
+
+\end{frame}
+\begin{frame}{Example 3: Homework}
+    \textbf{Cournot Duopoly}
+\par 
+    Consider Cournot Duopoly example with demand $p(q)=250-q$, if $q<250$, and $p(q)=0$ if $q\geq 250$, and $q=q_1+q_2$. The costs of both firms are $c_1(q_1)=20q_1$, $c_2(q_2)=20q_2$. Firms are competing on quantity.
+    \begin{enumerate}
+        \item Formally describe the game (players, strategies, payoff functions). 
+        \item Find best response correspondence of firm 1 when firm 2 is producing constant output $q_2$. Do the same for firm 2. 
+        \item Find iterated elimination of strictly dominated strategies equilibria. 
+        \item Find Nash equilibrium outputs for firm 1 ($q_1^{CD}$)  and ($q_2^{CD}$). 
+        \item Find total output produced  by both firms and price $p^{CD}$.
+        \item Compare  prices and quantities to both competitive and monopoly cases. 
+        \item Is there any improvement over monopoly competition? How about competitive outcome? If you are a policy maker, what would you suggest to do to improve the outcome?
+        
+    \end{enumerate}
+    
+\end{frame}
+\begin{frame}{Example 4: Homework}
+\textbf{Bertrand Duopoly}
+\par 
+Assume that the inverse demand is given by$p(q)=250-q$, if $q<250$, and $p(q)=0$ if $q\geq 250$, and $q=q_1+q_2$. The costs of both firms are $c_1(q_1)=20q_1$, $c_2(q_2)=20q_2$. Consumers buy from the firm whose price is the lowest. In case of a tie, market splits equally between two firms. 
+\begin{enumerate}
+    \item Find players and strategy spaces in this game. 
+    \item What are the quantity functions for both firm 1 and firm 2? 
+    \item Find profit function of firm 1 ($\pi_1(p_1,p_2)$) and firm 2 ($\pi_2(p_1,p_2)$).
+    \item Find Nash equilibrium in this game. 
+    \item How does prices and output differ from competitive outcome? Provide an intuition for your answer. 
+    \item As a policy maker, what kind of conclusion you can get from the Examples 1-4?
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Summary}
+\begin{itemize}
+\item Today, we discussed very important topic: firms competing in economy under different setups. 
+\item We saw that the desirable outcome is competitive equilibrium outcome, and it leads to highest output produced, and lowest prices for consumers. 
+\item When there was imperfect competition, firms obtained market power and affected prices and output. 
+\item When competition was on prices, efficiency restored, however, when it was on quantity, the inefficiency remained. 
+  \item  Assignment 2 is due next \textbf{Tuesday, September 28th, 2:00 pm}. \textbf{No late submissions.}
+\end{itemize}
+    
+\end{frame}
+
+
+\end{document}
