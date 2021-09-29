@@ -1,0 +1,541 @@
+\documentclass{beamer}
+
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+\usepackage{epsfig}
+
+\usepackage{amssymb, graphicx, amsmath, amsthm}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+\setbeamercovered{highly dynamic}
+\newcounter{saveenumi}
+\newcommand{\seti}{\setcounter{saveenumi}{\value{enumi}}}
+\newcommand{\conti}{\setcounter{enumi}{\value{saveenumi}}}
+
+\title{\textsc{Econ 437: Game Theory}}
+
+
+\subtitle{Lecture 1: Introduction} 
+\author{Instructor:  Mariam Arzumanyan}
+
+
+\date[UIUC, Fall 2021]{University of Illinois at Urbana-Champaign \\August 24, 2021 }
+
+
+\subject{Lecture Session}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+\pgfdeclareimage[height=0.7cm]{Illinilogo}{Illinilogo.png}
+\logo{\pgfuseimage{Illinilogo}} 
+% Let's get started
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\setbeamercovered{invisible}
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Class Information}
+\begin{itemize}
+  
+    \item \textbf{Phone:} 217-305-1079
+    \item \textbf{Email:} mariama2@illinois.edu
+\item \textbf{Office Hours:} Thursday 3:30 - 5:30 pm  by appointment
+\item \textbf{Meeting Time and Location:}
+TR 2:00 pm-3:20 pm, 1002 Lincoln Hall, \textbf{In-person Instructions}
+\end{itemize}
+
+\end{frame}
+\begin{frame}{References}
+	\begin{itemize}
+
+\item	\textbf{Tadelis, Game Theory: An Introduction, \textit{Princeton University Press, 2013}}
+\item	Osborne, An Introduction to Game Theory, \textit{Oxford University Press, 1st edition, 2003 }
+\item	Gibbons, Game Theory for Applied Economists, \textit{Princeton University Press, 1992}
+\item	http://www.gametheory.net/ for more interesting material 
+
+ \end{itemize}   
+\end{frame}
+\begin{frame}{Evaluations}
+\begin{itemize}
+     
+\item $(20\%)$ Participation
+\item $(20\%)$ Assignments
+\item $(30\%)$ Midterm 
+\item $(30\%)$ Final Exam
+ \end{itemize} 
+ \begin{block}{Standard Letter Grade}
+ \includegraphics[width=\textwidth]{grades.PNG}
+ \end{block}
+
+
+ In addition, there will be few extra credit opportunities that will pop up throughout the semester.
+\end{frame}
+
+\begin{frame}{Working in Groups}
+\begin{itemize}
+\item You can submit your assignments individually or you can sign up for groups of 3-5 students to help you to review and master the fundamental course material.
+\item The groups will be responsible to arrange once a week one-two hours meeting in-person or via Zoom to discuss the reading assignments. 
+\item During each meeting, you should follow the instructions of each assignment. 
+
+\item Plagiarism will lead to failure.
+
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}{Prerequisites}
+\begin{itemize}
+
+\item An undergraduate -level understanding of probability, statistics, graph theory, algorithms, and linear algebra is assumed. 
+\item Econ 202 (Econ Statistics I); Econ 302 (Inter Micro Theory); Math 220/221 (Calculus I) 
+\item Recommended: Econ 203 (Econ Statistics II); Math 231 (Calculus II)
+
+\end{itemize}
+\end{frame}
+\begin{frame}{Goal of the Course}
+\begin{itemize}
+\item To explore strategic decision making and expected outcomes in different setups of various games.
+\item To introduce students to the tools to set up and solve strategic interaction problems.
+\item To introduce  different sets of concepts and applications in real life economy.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Logic}
+\begin{block}{Statements}
+    A \textit{statement} is a sentence that, as it stands, is either true or false. 
+\end{block}
+In mathematics, a \textit{statement} might involve variables, and thus whether it's true or false might depend on certain values that variables can assume. 
+Examples:
+\begin{itemize}
+    \item "1$\leq$ 2" is a true statement. 
+    \item "3+2=4" is a false statement. 
+    \item "$x<4$" depends on the value of variable x. 
+    \item "$x<y$" depends on the values of two variables: x and y. 
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Logic}
+    \begin{block}{Quantifiers}
+    \textit{Quantifiers} specify conditions for which statements are true or false. 
+    \end{block}
+    The most common \textit{quantifiers} used in mathematics are the following:
+    \begin{itemize}
+        \item The symbol "$\exists$", which stands for "there exists".
+        \item The symbol "$\forall$", which stands for "for all". 
+    \end{itemize}
+   \textbf{Examples: }
+   Let $N$ be the set of natural numbers, that is: $N=\{1,2,3,4,...\}$.
+   \begin{itemize}
+       \item "$\exists x \in N$ such that $x<4$" is a true statement since it's true for x equals 1,2, and 3. 
+       \item "$\forall x \in N$, $x<4$" is a false statement, why?
+       \item "$\forall x$, $\exists y$ such that $x<y$" is a true statement. 
+       \item "$\exists x $ such that $\forall y, $ $x<y$" is a false statement.
+   \end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Logic}
+    \begin{block}{Connectives}
+    Suppose we have statements P and Q. We can combine them with connectives \textit{and, or, not, implies, if and only if}. 
+    \begin{enumerate}
+        \item \textbf{and, $\land$}: $P\land Q $ (P and Q) is true only when P and Q are both true. 
+        \item \textbf{or, $\lor$}: $P\lor Q $ (P or Q) is true if one or the other or both P and Q is true. 
+        \item \textbf{not, $\neg$}: $\neg P $ (Not P or negation of P) has the opposite truth value from P. 
+        \item \textbf{implies, $\Rightarrow$}: $P \Rightarrow Q$ (P implies Q, if P then Q, P causes Q, P is sufficient for Q, Q is necessary for P) is true unless P is true and Q is false. 
+        \item \textbf{if and only if, $\iff$}: $P\iff Q$ (P if and only if Q) is true when P and Q are both true or both false but is false otherwise. 
+    \end{enumerate}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Connectives}
+    \includegraphics[scale=0.6]{connectives_1.PNG}
+\end{frame}
+
+
+\begin{frame}{Connectives}
+    \includegraphics[scale=0.55]{connectives_2.PNG}
+\end{frame}
+\begin{frame}{Connectives}
+\textbf{Note:} Consider statement $P \Rightarrow Q$. We call statement $Q \Rightarrow P$ its \textit{converse}, and the statement $\neg P \Rightarrow \neg Q$ its \textit{inverse.} We call $\neg Q \Rightarrow \neg P$ its \textit{counterpositive.}
+
+\textbf{Example:} Show that $P\Rightarrow Q$ is equivalent to $\neg Q \Rightarrow \neg P$.
+
+    \includegraphics[scale=0.6]{connectives_3.PNG}
+    \par 
+    \textbf{Exercise:} Show that $\neg (P \land Q)$ is equivalent to $\neg P \lor \neg Q$.
+    
+    \textbf{Exercise:} Show that $\neg (P \lor Q)$ is equivalent to $\neg P \land \neg Q$
+\end{frame}
+\begin{frame}{Single Agent Decision Making}
+\begin{itemize}
+\item Decision making is about making choices.
+\item Suppose we are facing a choice between alternatives. 
+\begin{table}[]
+    \centering
+    \begin{tabular}{cc}
+        \includegraphics[scale=0.4]{9kitten.jpg} &  
+        \includegraphics[scale=0.065]{3654e9fdfbe7f8679f103dc974e4674a.jpg}
+        \includegraphics[scale=0.058]{Ozbhbp1.jpg}
+    \end{tabular}
+   
+    \label{tab:my_label}
+\end{table}
+\item How can we model decision making?
+
+\end{itemize}
+\end{frame}
+\begin{frame}{Economic Model of Decision Making }
+\begin{itemize}
+\item Set of alternatives is $X=\{\text{cat}, \text{panda}, \text{dog} \} $.
+
+\end{itemize}
+\begin{block}{Definition}
+A preference relation $\succeq$ over set of alternatives $X$ is a binary relation on a subset of $X\times X$.
+\par  We say there is a preference over two alternatives $x,y \in X$, if either $x\succeq y$, or $y \succeq x$, or both.
+\end{block}
+Example of preference relation can be cat$\succeq$dog, dog$\succeq$panda, cat$\succeq$panda. 
+\\
+Another example of preference can be panda$\succeq$cat, cat$\succeq$dog, panda$\succeq$dog.
+\\
+However, the following also can be a preference relation.
+panda$\succeq$cat, cat$\succeq$dog, but  $\neg$(dog$\succeq$panda), $\neg$(panda$\succeq$dog).
+\end{frame}
+
+
+
+
+\begin{frame}{Single Agent Decision Making}
+\begin{itemize}
+\item If the preference is cat$\succeq$dog, dog$\succeq$panda, cat$\succeq$panda, what should be the choice of the agent?
+\pause
+\item The agent with preference cat$\succeq$dog$\succeq$panda will choose cat, since it is the most preferred alternative. 
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 2
+\begin{frame}{Single Agent Decision Making}
+\begin{itemize}
+
+\item If the preference is panda$\succeq$cat, cat$\succeq$dog, panda$\succeq$dog,  what should be the choice of the agent?
+\pause
+ \item The agent with preference   panda$\succeq$cat$\succeq$dog will choose panda. 
+
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%3
+
+\begin{frame}{Single Agent Decision Making}
+\begin{itemize}
+
+\item If the preference is panda$\succeq$cat, cat$\succeq$dog, but  $\neg$(dog$\succeq$panda), $\neg$(panda$\succeq$dog), what should be the choice of the agent?
+\pause
+\item It is not clear what the choice should be when the preference is panda$\succeq$cat, cat$\succeq$dog, but $\neg$(dog$\succeq$panda), $\neg$(panda$\succeq$dog). In that case, agent is unable to compare panda and dog.
+
+\item This means that we need to restrict the attention to specific preferences that have nice properties. 
+\end{itemize}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Properties of Preference Relation}
+\begin{block}{Completeness}
+A preference relation $\succeq$ is complete if for every pair of elements $x,y \in X$, we have either $x\succeq y$, or $y\succeq x$, or both.
+\end{block}
+\begin{block}{Transitivity}
+A preference relation $\succeq$ is transitive, if for every elements $x,y,z\in X$, if $x \succeq y$, and $y \succeq z$, then  $x \succeq z$.
+\end{block}
+
+\begin{block}{Rationality}
+A preference relation $\succeq$ is rational if it is complete and transitive.
+\end{block}
+\end{frame}
+\begin{frame}{Example 1}
+\begin{block}{Definition}
+ Suppose $X=\{1,2,..., 100\}$. For $x,y \in X$ define $x\succeq y$ if and only if $x \geq y$.
+\end{block}
+Are the following statements correct or not?
+\begin{enumerate}
+    \item The relation $\succeq$ is complete.
+    \item The relation $\succeq$ is transitive.
+      % \item The relation $\succeq$ is asymmetric. 
+    \item The relation $\succeq$ is rational.
+
+    %\item The relation $\succeq$ is convex.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Example 1: Answers}
+\begin{enumerate}
+    \item The relation $\succeq$ is complete, since for any number either one is bigger than the other, or they are equal. 
+    \item The relation $\succeq$ is transitive, since if we have $x\succeq y$, and $y\succeq z$, it implies that we have $x\geq y$, and $y\geq z$, and from transitivity of $\geq$, we must have $x\geq z$, and this implies $x\succeq z$.  
+       % \item The relation $\succeq$ is not asymmetric.
+    \item The relation $\succeq$ is rational, because it is both complete and transitive.
+
+    %\item The relation $\succeq$ is convex.
+\end{enumerate}
+\end{frame}
+\begin{frame}{Example 2}
+\begin{block}{Definition}
+ Suppose $X=\{1,2,..., 100\}$. For $x,y \in X$ define $x\succeq y$ if and only if $x - y$ is a positive prime number.
+\end{block}
+Are the following statements correct or not?
+\begin{enumerate}
+    \item The relation $\succeq$ is complete.
+    \item The relation $\succeq$ is transitive.
+      %  \item The relation $\succeq$ is asymmetric. 
+    \item The relation $\succeq$ is rational.
+
+    %\item The relation $\succeq$ is convex.
+\end{enumerate}
+\end{frame}
+\begin{frame}{Example 2: Answers}
+\begin{enumerate}
+    \item The relation $\succeq$ is not complete, since there is a counterexample. For the following numbers we have that $\neg(10 \succeq 4)$, or $\neg(4 \succeq 10)$.
+    \item The relation $\succeq$ is not transitive, since there is a counterexample. $5\succeq 3$, $3 \succeq 1$, however $\neg(5 \succeq 1)$.
+      %  \item The relation $\succeq$ is asymmetric, because for any $x,y \in X$, if $x\succeq y$ it means $x-y$ is a positive number, therefore $y-x$ will be negative, which implies $\neg(y\succeq x)$. 
+    \item The relation $\succeq$ is not rational, since it is not complete and transitive.
+
+    %\item The relation $\succeq$ is convex.
+\end{enumerate}
+\end{frame}
+\begin{frame}{Example 3: Homework}
+\begin{block}{Definition}
+ Suppose $X=\{1,2,..., 60\}$. For $x,y \in X$ define $x\succeq y$ if and only if $0\leq x - y\leq 30$.
+\end{block}
+Are the following statements correct or not?
+\begin{enumerate}
+    \item The relation $\succeq$ is complete.
+    \item The relation $\succeq$ is transitive.
+       % \item The relation $\succeq$ is asymmetric. 
+    \item The relation $\succeq$ is rational.
+
+    %\item The relation $\succeq$ is convex.
+\end{enumerate}
+\end{frame}
+\begin{frame}{Single Agent Decision Making}
+\begin{itemize}
+\item An agent with preference described in Example 1 will choose $100$, since it is the best alternative. 
+\item However, an agent with preference described in Example 2 will not be able to choose the best one. 
+\item In general, the main difference between those two cases is rationality. The following lemma summarizes it.
+
+\end{itemize}
+\begin{block}{Lemma}
+If the set of alternatives $X$ is discrete, and the preference relation $\succeq$ over $X$ is rational, then the agent will choose from the following set 
+\[\{ x \in X: \text{ such that } x\succeq y, \text{ for all } y \in X\}.
+\]
+\end{block}
+Notice that there might be multiple best elements. 
+\end{frame}
+\begin{frame}{Preferences}
+\begin{itemize}
+    \item {
+    We start with preference relations as a binary relation on the set of alternatives $X$.  We can define weak preference relation $\succeq$ and from this define strict preference relation and indifference relation by }
+    \par
+  
+   
+\end{itemize}
+\begin{block}{Strict Preference}
+ $x$ is strictly preferred to $y$, and define by $x\succ y$ $\iff$ $x\succeq y$ but  $\neg(y\succeq x)$.
+   \end{block}
+   \begin{block}{Indifference}
+     $x$ is indifferent to $y$, and define by  $x \sim y$ $\iff$ $x\succeq y$ and  $y\succeq x$.
+     \end{block}
+\end{frame}
+\begin{frame}{Example 4}
+\begin{block}{Definition}
+ Suppose $X=[0,1]\times [0,1]$. $x=(x_1, x_2)\in X$, and $y=(y_1,y_2) \in X$. Define $(x_1, x_2) \succeq (y_1,y_2)$, if $x_1^2+x_2^2\geq y_1^2+y_2^2$.
+\end{block}
+\begin{itemize}
+\item Is $(0.5, 0.5) \succeq (0,1)$?
+\item Is $(0.4,0.3) \succ (0.7,0.1)$?
+\item Can you find any alternative that is indifferent to $(0.8,0.2)$? How about $(0.7, 0.3)$? Or $(0.5,0.5)$?
+\item What are the best alternatives in $X$? Is it unique?
+\end{itemize}
+\end{frame}
+\begin{frame}{Example 4: Answers}
+   \begin{block}{Definition}
+ Suppose $X=[0,1]\times [0,1]$. $x=(x_1, x_2)\in X$, and $y=(y_1,y_2) \in X$. Define $(x_1, x_2) \succeq (y_1,y_2)$, if $x_1^2+x_2^2\geq y_1^2+y_2^2$.
+\end{block}
+\begin{itemize}
+\item Is $(0.5, 0.5) \succeq (0,1)$?
+
+\end{itemize}
+Notice that $(x_1,x_2)=(0.5,0.5)$, $(y_1,y_2)=(0,1)$, i.e., $x_1=0.5$, $x_2=0.5$, $y_1=0$, $y_2=1$. 
+\\
+We have $x_1^2+x_2^2=0.5^2+0.5^2=0.5$, and $y_1^2+y_2^2=0^2+1^2=1$. Since $0.5 < 1$, we conclude that $\neg((0.5, 0.5) \succeq (0,1))$.
+\end{frame}\begin{frame}{Example 4: Answers}
+   \begin{block}{Definition}
+ Suppose $X=[0,1]\times [0,1]$. $x=(x_1, x_2)\in X$, and $y=(y_1,y_2) \in X$. Define $(x_1, x_2) \succeq (y_1,y_2)$, if $x_1^2+x_2^2\geq y_1^2+y_2^2$.
+\end{block}
+\begin{itemize}
+
+\item Is $(0.4,0.3) \succ (0.7,0.1)$ or $(0.7,0.1) \succ (0.4,0.3)$?
+
+\end{itemize}
+Notice that $(x_1,x_2)=(0.4,0.3)$, $(y_1,y_2)=(0.7,0.1)$, i.e., $x_1=0.4$, $x_2=0.3$, $y_1=0.7$, $y_2=0.1$. 
+\\
+We have $x_1^2+x_2^2=0.4^2+0.3^2=0.25$, and $y_1^2+y_2^2=0.7^2+0.1^2=0.5$. Since $0.25 < 0.5$, we conclude that $\neg((0.4, 0.3) \succeq (0.7,0.1))$. However, $0.5\geq 0.25$, and therefore $(0.7,0.1) \succ (0.4,0.3)$.
+\end{frame}
+
+\begin{frame}{Example 4: Answers}
+   \begin{block}{Definition}
+ Suppose $X=[0,1]\times [0,1]$. $x=(x_1, x_2)\in X$, and $y=(y_1,y_2) \in X$. Define $(x_1, x_2) \succeq (y_1,y_2)$, if $x_1^2+x_2^2\geq y_1^2+y_2^2$.
+\end{block}
+\begin{itemize}
+
+\item Can you find any alternative that is indifferent to $(0.8,0.2)$? How about $(0.7, 0.3)$? Or $(0.5,0.5)$?
+
+\end{itemize}
+To answer this part, notice the following:
+\[x_1^2+x_2^2=x_2^2+x_1^2.
+\]
+So, $0.8^2+ 0.2^2=0.2^2+0.8^2$, therefore $(0.2, 0.8)$ is indifferent to $(0.8, 0.2)$.
+\\
+Similarly, $(0.7,0.3)$ is indifferent to $(0.3, 0.7)$. 
+\\
+What about $(0.5,0.5)$? In this case notice that every pair such that $x_1^2+x_2^2=0.5^2+0.5^2=0.5$, will be indifferent to $(0.5,0.5)$. 
+For example, $(0.7,0.1)$ and $(0.1, 0.7)$ are indifferent to $(0.5,0.5)$.
+\end{frame}\begin{frame}{Example 4: Answers}
+   \begin{block}{Definition}
+ Suppose $X=[0,1]\times [0,1]$. $x=(x_1, x_2)\in X$, and $y=(y_1,y_2) \in X$. Define $(x_1, x_2) \succeq (y_1,y_2)$, if $x_1^2+x_2^2\geq y_1^2+y_2^2$.
+\end{block}
+\begin{itemize}
+\item What are the best alternatives in $X$? Is it unique?
+\end{itemize}
+Notice that the higher $x_1$, and $x_2$ are, the more preferred is the alternative $(x_1,x_2)$. As you guessed already, the best alternative in $X$ is $(1,1)$, since that is the biggest both $x_1$, and $x_2$ can be. 
+\\
+It is unique, because any other alternative will give lower "payoff".
+
+\end{frame}
+\begin{frame}{Example 5: Homework}
+\begin{block}{Definition}
+ Suppose $X=[-1,1]\times [-1,1]$. $x=(x_1, x_2)\in X$, and $y=(y_1,y_2) \in X$. Define $(x_1, x_2) \succeq (y_1,y_2)$, if $x_1^2+x_2^2\geq y_1^2+y_2^2$.
+\end{block}
+\begin{itemize}
+\item Is $(-0.5, 0.5) \succeq (0,1)$?
+\item Is $(-0.4,0.3) \succ (-0.7,-0.1)$?
+\item Can you find any alternative that is indifferent to $(0.8,0.2)$? How about $(0.7, 0.3)$? Or $(0.5,0.5)$?
+\item What are the best alternatives in $X$? Is it unique?
+\end{itemize}
+\end{frame}
+\begin{frame}{Single Agent Decision Making}
+\begin{itemize}
+\item When the set of alternatives is not discrete, rationality is not enough to guarantee the existence of a best alternative.
+\item Theoretical results proving existence are beyond the scope of this class. 
+\item You should be familiar with the following results from intermediate Micro class.  
+\end{itemize}
+\end{frame}
+\begin{frame}{Utility or Payoff Function}
+\begin{block}{Definition}
+A utility function $u:X\rightarrow \mathbb{R}$ represents the preference $\succeq$ if and only if $\forall x,y \in X$,
+\begin{equation}
+  \text{ } x\succeq y \iff u(x)\geq u(y).
+\end{equation}
+ 
+\end{block}
+\begin{itemize}
+\item Utility represents order and not level of preference.
+\item A preference  may have many utility functions representing it. 
+\item If $\succeq$ are represented by a utility function, then $\succeq $ are complete         and transitive.
+\item If $u$ represents $\succeq$, and $f:\mathbb{R}\rightarrow \mathbb{R}$ is strictly increasing function, then $f(u(\cdot))$ also represents $\succeq$.
+\end{itemize}
+\end{frame}
+\begin{frame}{Single Agent Decision Making}
+    Suppose that preference $\succeq$ over the set of alternatives $X$ is rational, and it is represented by a utility function $u(\cdot)$. The agent will choose the alternative that is the best (if exists). In this case if it exists, it will be the solution of 
+    \begin{block}{ Agent Maximization Problem }
+     \begin{equation*}
+         \max_{x \in X} u(x).
+     \end{equation*}
+    \end{block}
+    The solution to this problem also is called consumer demand.  This class will introduce you to new concepts of theory.
+\end{frame}
+\begin{frame}{Example 6}
+    \begin{block}{Single-Agent Decision Making}
+     Suppose that the set of alternatives is $X=[0,1]$, and the utility function is $u(x)=x-x^2$, for all $x\in[0,1]$. 
+     What is the agent's choice in this example?
+    \end{block}
+    In this example you should remember from Calculus class that we must take first order conditions, and second order conditions. 
+    \[ \textbf{FOC: } u'(x)=1-2x=0 \Rightarrow x^*=\frac{1}{2}.
+    \]
+    \[ \textbf{SOC: } u''(x)=-2<0.
+    \]
+    Since second order conditions are satisfied, then we have that $x^*=\frac{1}{2}$ is global maximum, and therefore the choice of the agent. 
+\end{frame}
+\begin{frame}{Example 7: Homework}
+    \begin{block}{Single-Agent Decision Making}
+     Suppose that the set of alternatives is $X=[0,1]\times [0,1]$, and the utility function is $u(x_1, x_2)=2-(x_1-1)^2-(x_2-1)^2-0.5x_1-0.25x_2$, for all $(x_1, x_2)\in X$. 
+     
+    \end{block}
+    \begin{enumerate}
+\item If you have to choose between the coordinates (0,1) or  (1,0), which one would you choose?
+\item Find five coordinates  that will give strictly higher utility than $(1, 1)$.
+    
+    
+    \item If you are free to choose any coordinate in $X=[0,1]\times [0,1]$, which coordinates will you choose? Why?
+    
+\end{enumerate}
+\end{frame}
+\begin{frame}{Summary}
+    \begin{itemize}
+        \item Single agent problems are optimization problems. 
+        \item Rational agents maximize their preferences/payoffs. 
+        \item This lecture is based on Tadelis, "Game Theory: An Introduction", pages 4-13.
+    \end{itemize}
+\end{frame}
+
+\end{document}
