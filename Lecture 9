@@ -1,0 +1,832 @@
+\documentclass{beamer}
+
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+\setbeamercovered{highly dynamic}
+\newcounter{saveenumi}
+\newcommand{\seti}{\setcounter{saveenumi}{\value{enumi}}}
+\newcommand{\conti}{\setcounter{enumi}{\value{saveenumi}}}
+
+\title{\textsc{Econ 437: Game Theory}}
+
+
+\subtitle{Lecture 9: Mixed Strategy Nash Equilibrium} 
+\author{Instructor:  Mariam Arzumanyan}
+
+
+\date[UIUC, Fall 2021]{University of Illinois at Urbana-Champaign \\September 21, 2021 }
+
+
+\subject{Lecture Session}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+\pgfdeclareimage[height=0.7cm]{Illinilogo}{Illinilogo.png}
+\logo{\pgfuseimage{Illinilogo}} 
+% Let's get started
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+\begin{frame}{Introduction}
+    \begin{itemize}
+        \item Last class,  we  introduced  a concept of pure strategy Nash equilibria.
+        \item Today, we discuss mixed strategy Nash equilibrium.
+        \item Suggested reading: Tadelis, "Game Theory",  pages 101-123.
+    \end{itemize}
+    
+   
+\end{frame}
+
+\begin{frame}{Matching Pennies}
+Two players have a penny and must choose whether to display it with heads or tails facing up. If the two pennies match (i.e., both are heads up or both are tails up) then player 2 wins player 1's penny; if the pennies do not match then player 1 wins player 2's penny. 
+    
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$Heads$} & \multicolumn{1}{l}{$Tails$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Heads$} & \multicolumn{1}{c|}{-1,1}        & \multicolumn{1}{c|}{1,-1}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Tails$}       &
+                          \multicolumn{1}{c|}{1,-1}        & \multicolumn{1}{c|}{-1,1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item This game is called a \textbf{zero-sum } game.
+    \item This game does not have a pure strategy Nash equilibrium.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Matching Pennies}
+\begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$Heads$} & \multicolumn{1}{l}{$Tails$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Heads$} & \multicolumn{1}{c|}{-1,1}        & \multicolumn{1}{c|}{1,-1}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Tails$}       &
+                          \multicolumn{1}{c|}{1,-1}        & \multicolumn{1}{c|}{-1,1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item In this game, pure strategy Nash equilibria fails to exist. 
+    \item However, if we allow players to choose mixed strategies, there will be an equilibrium. 
+    \item Matching Pennies is not the only game that fails to have a pure-strategy Nash equilibrium. 
+    \item Zero-sum games do not have a pure-strategy Nash equilibrium. 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Mixed Strategy Nash Equilibrium}
+\begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$Heads$} & \multicolumn{1}{l}{$Tails$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Heads$} & \multicolumn{1}{c|}{-1,1}        & \multicolumn{1}{c|}{1,-1}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Tails$}       &
+                          \multicolumn{1}{c|}{1,-1}        & \multicolumn{1}{c|}{-1,1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item Suppose player 2 plays Heads with probability $p \in [0,1]$, and Tails with probability $(1-p)$.
+\item Let's see what will be best response of player 1:
+\[\text{ Player 1's payoff from Heads: } -1\times p + 1\times (1-p)=1-2p,
+\]
+\[\text{ Player 1's payoff from Tails: } 1\times p + (-1)\times (1-p)=-1+2p.
+\]
+
+\item If $1-2p \geq -1+2p$, $p\leq \frac{1}{2}$, then the best response is Heads, otherwise it is Tails. 
+   \end{itemize}
+\end{frame}
+
+\begin{frame}{Mixed Strategy Nash Equilibrium}
+\begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$Heads$} & \multicolumn{1}{l}{$Tails$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Heads$} & \multicolumn{1}{c|}{-1,1}        & \multicolumn{1}{c|}{1,-1}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Tails$}       &
+                          \multicolumn{1}{c|}{1,-1}        & \multicolumn{1}{c|}{-1,1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+
+\item Suppose player 2 plays Heads with probability $p \in [0,1]$, and Tails with probability $(1-p)$.
+\item If  $p\leq \frac{1}{2}$, then the best response is Heads, if   $p\geq \frac{1}{2}$, best response is Tails. 
+\item If  $p= \frac{1}{2}$, then player 1 is indifferent between Heads and Tails, and therefore both will be best response. 
+\item In that case, player 1 will be indifferent mixing between Heads and Tails, since both will give equal payoff. 
+ \end{itemize}
+\end{frame}
+
+\begin{frame}{Mixed Strategy Nash Equilibrium}
+\begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$Heads$} & \multicolumn{1}{l}{$Tails$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Heads$} & \multicolumn{1}{c|}{-1,1}        & \multicolumn{1}{c|}{1,-1}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Tails$}       &
+                          \multicolumn{1}{c|}{1,-1}        & \multicolumn{1}{c|}{-1,1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+
+\item Suppose player 1 plays Heads with probability $q \in [0,1]$, and Tails with probability $(1-q)$.
+\item Let's see what will be best response of player 2:
+\[\text{ Player 2's payoff from Heads: } 1\times q + (-1)\times (1-q)=-1+2q,
+\]
+\[\text{ Player 2's payoff from Tails: } -1\times q + 1\times (1-q)=1-2q.
+\]
+
+\item If $-1+2q \geq 1-2q$, $q\geq \frac{1}{2}$, then the best response is Heads, otherwise it is Tails. 
+ \end{itemize}
+\end{frame}
+
+\begin{frame}{Mixed Strategy Nash Equilibrium}
+\begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$Heads$} & \multicolumn{1}{l}{$Tails$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Heads$} & \multicolumn{1}{c|}{-1,1}        & \multicolumn{1}{c|}{1,-1}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Tails$}       &
+                          \multicolumn{1}{c|}{1,-1}        & \multicolumn{1}{c|}{-1,1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+
+\item Suppose player 1 plays Heads with probability $q \in [0,1]$, and Tails with probability $(1-q)$.
+\item If  $q\geq \frac{1}{2}$, then the best response is Heads, if   $q\leq \frac{1}{2}$, best response is Tails. 
+\item If  $q= \frac{1}{2}$, then player 2 is indifferent between Heads and Tails, and therefore both will be best response. 
+\item In that case, player 2 will be indifferent mixing between Heads and Tails, since both will give equal payoff. 
+
+
+\end{itemize}
+
+
+
+\end{frame}
+
+\begin{frame}{Mixed Strategy Nash Equilibrium}
+\begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$Heads$} & \multicolumn{1}{l}{$Tails$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Heads$} & \multicolumn{1}{c|}{-1,1}        & \multicolumn{1}{c|}{1,-1}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Tails$}       &
+                          \multicolumn{1}{c|}{1,-1}        & \multicolumn{1}{c|}{-1,1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item When player 1 is mixing with probability $(\frac{1}{2}, \frac{1}{2})$, player 2 is indifferent between Heads and Tails, and therefore mixing. 
+    \item When player 2 is mixing with probability $(\frac{1}{2}, \frac{1}{2})$, player 1 is indifferent between Heads and Tails, and therefore mixing. 
+    \item Player 1's mixed strategy $(\frac{1}{2}, \frac{1}{2})$ is a best response to player 2's mixed strategy $(\frac{1}{2}, \frac{1}{2})$, and vice-versa, player 2's mixed strategy $(\frac{1}{2}, \frac{1}{2})$ is a best response to player 1's mixed strategy $(\frac{1}{2}, \frac{1}{2})$. 
+    \item Therefore, mixed strategy profile $\sigma_1=(\frac{1}{2}, \frac{1}{2})$, $\sigma_2=(\frac{1}{2}, \frac{1}{2})$ is a mixed strategy Nash equilibrium.
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Mixed Strategy Nash Equilibrium}
+
+\begin{block}{Definition}
+The mixed-strategy profile $\sigma^*=(\sigma_1^*, \sigma_2^*, ..., \sigma_n^*)$ is a Nash equilibrium if for each player $\sigma_i^*$ is a best response to $\sigma_{-i}^*$. 
+\[u_i(\sigma_i^*, \sigma_{-i}^*) \geq u_i(\sigma_i, \sigma_{-i}^*), \text{ for all } \sigma_i \in \Delta S_i.
+\]
+
+\end{block}
+\begin{block}{Proposition}
+If $\sigma^* $ is a Nash equilibrium, and both $s_i$ and $s_i^\prime $ are in the support of $\sigma_i^*$, then 
+\[u_i(s_i, \sigma_{-i}^*)=u_i(s_i^\prime, \sigma_{-i}^*)=u_i(\sigma_i^*, \sigma_{-i}^*) 
+\]
+
+\end{block}
+If a player is randomizing between two alternatives then she must be indifferent between them. 
+
+\end{frame}
+
+\begin{frame}{BoS Game}
+ 
+    \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}       & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                                            \\
+\multirow{4}{*}{Player 1} &                                 & \multicolumn{1}{l}{Bach} & \multicolumn{1}{l}{Stravinsky} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Bach}       & \multicolumn{1}{c|}{2,1} & \multicolumn{1}{c|}{0,0}       \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Stravinsky} & \multicolumn{1}{c|}{0,0} & \multicolumn{1}{c|}{1,2}       \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item Suppose player 2 plays Bach with probability $p \in [0,1]$, and Stravinsky with probability $(1-p)$.
+\item Let's see what will be best response of player 1:
+\[\text{ Player 1's payoff from B: } 2\times p + 0\times (1-p)=2p,
+\]
+\[\text{ Player 1's payoff from S: } 0\times p + 1\times (1-p)=1-p.
+\]
+
+\item If $2p = 1-p$, $p= \frac{1}{3}$, then player 1 will mix. 
+   \end{itemize}
+   
+   \end{frame}
+
+\begin{frame}{BoS Game}
+ 
+    \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}       & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                                            \\
+\multirow{4}{*}{Player 1} &                                 & \multicolumn{1}{l}{Bach} & \multicolumn{1}{l}{Stravinsky} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Bach}       & \multicolumn{1}{c|}{2,1} & \multicolumn{1}{c|}{0,0}       \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Stravinsky} & \multicolumn{1}{c|}{0,0} & \multicolumn{1}{c|}{1,2}       \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+\begin{itemize}
+
+\item Suppose player 1 plays Bach with probability $q \in [0,1]$, and Stravinsky with probability $(1-q)$.
+\item Let's see what will be best response of player 2:
+\[\text{ Player 2's payoff from B: } 1\times q + 0\times (1-q)=q,
+\]
+\[\text{ Player 2's payoff from S: } 0\times q + 2\times (1-q)=2-2q.
+\]
+
+\item If $q=2-2q$, $q= \frac{2}{3}$, then player 2 will mix between B and S.  
+ \end{itemize}
+
+  \end{frame}
+
+\begin{frame}{BoS Game}
+ 
+    \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}       & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                                            \\
+\multirow{4}{*}{Player 1} &                                 & \multicolumn{1}{l}{Bach} & \multicolumn{1}{l}{Stravinsky} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Bach}       & \multicolumn{1}{c|}{2,1} & \multicolumn{1}{c|}{0,0}       \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Stravinsky} & \multicolumn{1}{c|}{0,0} & \multicolumn{1}{c|}{1,2}       \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item Player 1's strategy $\sigma_1^*=(\frac{2}{3}, \frac{1}{3})$, and player 2's strategy $\sigma_2^*=(\frac{1}{3}, \frac{2}{3})$ are mixed strategy Nash equilibrium of this game. 
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Stag Hunt Game}
+
+
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Hunter 2}                                   \\
+\multirow{4}{*}{Hunter 1} &                                    & \multicolumn{1}{l}{$Stag$} & \multicolumn{1}{l}{$Hare$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Stag$} & \multicolumn{1}{c|}{2,2}        & \multicolumn{1}{c|}{0,1}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Hare$}       &
+                          \multicolumn{1}{c|}{1,0}        & \multicolumn{1}{c|}{1,1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item Suppose player 2 plays Stag with probability $p \in [0,1]$, and Hare with probability $(1-p)$.
+\item Let's see what will be best response of player 1:
+\[\text{ Player 1's payoff from Stag: } 2\times p + 0\times (1-p)=2p,
+\]
+\[\text{ Player 1's payoff from Hare: } 1\times p + 1\times (1-p)=1.
+\]
+
+\item If $2p = 1$, $p= \frac{1}{2}$, then player 1 will mix. 
+   \end{itemize}
+
+
+
+\end{frame}
+
+
+\begin{frame}{Stag Hunt Game}
+
+
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Hunter 2}                                   \\
+\multirow{4}{*}{Hunter 1} &                                    & \multicolumn{1}{l}{$Stag$} & \multicolumn{1}{l}{$Hare$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Stag$} & \multicolumn{1}{c|}{2,2}        & \multicolumn{1}{c|}{0,1}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Hare$}       &
+                          \multicolumn{1}{c|}{1,0}        & \multicolumn{1}{c|}{1,1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+
+
+\begin{itemize}
+
+\item Suppose player 1 plays Stag with probability $q \in [0,1]$, and Hare with probability $(1-q)$.
+\item Let's see what will be best response of player 2:
+\[\text{ Player 2's payoff from Stag: } 2\times q + 0\times (1-q)=2q,
+\]
+\[\text{ Player 2's payoff from Hare: } 1\times q + 1\times (1-q)=1.
+\]
+
+\item If $2q=1$, $q= \frac{1}{2}$, then player 2 will mix.  
+ \end{itemize}
+
+\end{frame}
+\begin{frame}{Stag Hunt Game}
+
+
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Hunter 2}                                   \\
+\multirow{4}{*}{Hunter 1} &                                    & \multicolumn{1}{l}{$Stag$} & \multicolumn{1}{l}{$Hare$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Stag$} & \multicolumn{1}{c|}{2,2}        & \multicolumn{1}{c|}{0,1}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Hare$}       &
+                          \multicolumn{1}{c|}{1,0}        & \multicolumn{1}{c|}{1,1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item Player 1's strategy $\sigma_1^*=(\frac{1}{2}, \frac{1}{2})$, and player 2's strategy $\sigma_2^*=(\frac{1}{2}, \frac{1}{2})$ are mixed strategy Nash equilibrium of this game. 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Example 1: Homework}
+
+
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$L$} & \multicolumn{1}{l}{$R$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$U$} & \multicolumn{1}{c|}{2,2}        & \multicolumn{1}{c|}{0,0}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$D$}       &
+                          \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{5,5}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+Find all mixed strategy Nash equilibria of this game. 
+
+
+\end{frame}
+\begin{frame}{Example 2: Homework}
+
+
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$L$} & \multicolumn{1}{l}{$R$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$U$} & \multicolumn{1}{c|}{3, -3}        & \multicolumn{1}{c|}{2, 3}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$D$}       &
+                          \multicolumn{1}{c|}{-4, 4}        & \multicolumn{1}{c|}{5,5}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+Find all mixed strategy Nash equilibria of this game. 
+
+
+\end{frame}
+
+
+\begin{frame}{Example 3}
+
+
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$L$} & \multicolumn{1}{l}{$R$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$U$} & \multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{0,0}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$D$}       &
+                          \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{-1, -1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item Notice that mixed strategy Nash equilibrium might not exist. 
+    \item Suppose player 2 plays L with probability $p \in [0,1]$, and R with probability $(1-p)$.
+\item Let's see what will be best response of player 1:
+\[\text{ Player 1's payoff from U: } 1\times p + 0\times (1-p)=p,
+\]
+\[\text{ Player 1's payoff from D: } 0\times p + (-1)\times (1-p)=-1-p.
+\]
+
+\item Notice that always $p > -1-p$, and therefore it is always better for player 1 to play U. 
+    
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Example 3}
+
+
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$L$} & \multicolumn{1}{l}{$R$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$U$} & \multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{0,0}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$D$}       &
+                          \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{-1, -1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item In this game, no matter what player 2 does, player 1 will always prefer to play U. Therefore, there is no mixed strategy Nash equilibrium. 
+    \item The reason is that in this game there is a unique strictly dominant strategy equilibrium, $(U, L)$. 
+    \item \textbf{If a unique strategy survives iterated elimination of strictly dominated strategies, then the game does not have a mixed strategy Nash equilibrium. }
+    \item $(U, L)$ is the only pure strategy Nash equilibrium of the game. 
+\end{itemize}
+\end{frame}
+\begin{frame}{Example 4}
+          \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{0,0}
+                           & \multicolumn{1}{c|}{0,0}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{5,5}
+                           & \multicolumn{1}{c|}{0,0}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{0,0}         & \multicolumn{1}{c|}{0,0}   & \multicolumn{1}{c|}{1,1}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item Suppose player 2 plays L with probability $p_L \in [0,1]$, M with probability $p_M$ and R with probability $p_R$.
+\item Let's see what will be best response of player 1:
+   \end{itemize}
+\[
+    \text{ Player 1's payoff from U: } 1\times p_L + 0\times p_M+0\times p_R =p_L,
+\]
+\[
+   \text{ Player 1's payoff from M: } 0\times p_L + 5\times p_M+0\times p_R =5p_M,
+\]
+\begin{equation*}
+  \text{ Player 1's payoff from D: } 0\times p_L + 0\times p_M+1\times p_R =p_R.
+\end{equation*}
+
+
+ 
+
+ If $p_L = 5p_M=p_R$, then player 1 will mix. 
+
+\end{frame}
+\begin{frame}{Example 4}
+          \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{0,0}
+                           & \multicolumn{1}{c|}{0,0}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{5,5}
+                           & \multicolumn{1}{c|}{0,0}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{0,0}         & \multicolumn{1}{c|}{0,0}   & \multicolumn{1}{c|}{1,1}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item Suppose player 2 plays L with probability $p_L \in [0,1]$, M with probability $p_M$ and R with probability $p_R$.
+\item If $p_L = 5p_M=p_R$, then player 1 will mix. 
+\item Notice that $p_L+p_M+p_R=1$. 
+\item Solving the system of linear equations, we get $p_L=p_R=\frac{5}{11}$, $p_M=\frac{1}{11}$. 
+\item Since both players have identical payoffs, we have that the following is the mixed strategy Nash equilibrium of this game:
+\[ \sigma_1^*=(\frac{5}{11}, \frac{1}{11}, \frac{5}{11}),  \sigma_2^*=(\frac{5}{11}, \frac{1}{11}, \frac{5}{11}).
+\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example 5: Homework}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{6,6}        & \multicolumn{1}{c|}{2,8}
+                           & \multicolumn{1}{c|}{0,4}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{8,2}        & \multicolumn{1}{c|}{4,4}
+                           & \multicolumn{1}{c|}{1,3}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{4,0}         & \multicolumn{1}{c|}{3,1}   & \multicolumn{1}{c|}{2,2}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all mixed strategy Nash equilibria of this game.
+    
+\end{frame}
+
+\begin{frame}{Example 6: Homework}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{4,3}        & \multicolumn{1}{c|}{5,1}
+                           & \multicolumn{1}{c|}{6,2}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{2,1}        & \multicolumn{1}{c|}{8,4}
+                           & \multicolumn{1}{c|}{3,6}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{3,0}         & \multicolumn{1}{c|}{9,6}   & \multicolumn{1}{c|}{2,8}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all mixed strategy Nash equilibria of this game.
+    
+\end{frame}
+
+\begin{frame}{Example 7: Homework}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{-1, 3}        & \multicolumn{1}{c|}{3,3}
+                           & \multicolumn{1}{c|}{3, 5}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{1,0}        & \multicolumn{1}{c|}{3,3}
+                           & \multicolumn{1}{c|}{0,-1}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{2,-1}         & \multicolumn{1}{c|}{3,3}   & \multicolumn{1}{c|}{5,3}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all mixed strategy Nash equilibria of this game.
+    
+\end{frame}
+
+\begin{frame}{Example 8: Homework}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{4,4}        & \multicolumn{1}{c|}{-1,5}
+                           & \multicolumn{1}{c|}{3, 3}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{5,-1}        & \multicolumn{1}{c|}{1,1}
+                           & \multicolumn{1}{c|}{0,-1}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{4,10}         & \multicolumn{1}{c|}{3,3}   & \multicolumn{1}{c|}{5,7}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all mixed strategy Nash equilibria of this game.
+    
+\end{frame}
+
+\begin{frame}{Nash's Existence Theorem }
+
+\begin{block}{Theorem (Nash's Existence Theorem)}
+Any n-player normal-form game with finite strategy sets $S_i$ for all players has a (Nash) equilibrium in either pure or mixed strategies.
+    
+\end{block}
+    \begin{itemize}
+        \item The Nash equilibrium solution concept is powerful because it exists for most games. 
+        \item Nash equilibrium leads to more refined predictions than strictly dominant strategy equilibrium and iterated-elimination equilibrium. 
+        \item Nash equilibrium is widely used by game theorists. 
+        
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Nash's Existence Theorem }
+\begin{block}{Definition}
+A pure-strategy profile $s^*\in S$ is a Nash equilibrium if and only if it is a fixed point of the collection  of best-response correspondences, $s^*\in BR(s^*)$. 
+
+\end{block}
+
+ \begin{block}{Definition}
+A mixed-strategy profile $\sigma^*\in \Delta S$ is a Nash equilibrium if and only if it is a fixed point of the collection  of best-response correspondences, $\sigma ^*\in BR(\sigma^*)$. 
+
+\end{block}   
+
+If it is possible to prove that a fixed point exists, then it implies that a Nash equilibrium exists.
+\end{frame}
+
+
+\begin{frame}{Brouwer's Fixed-Point Theorem}
+\begin{block}{Theorem}
+If $f(x)$ is a continuous function from the domain $[0,1]$ to itself then there exists at least one fixed point, i.e., a value $x^*\in [0,1]$ such that $f(x^*)=x^*$. 
+
+\end{block}
+    The idea is that if $f(x)$ takes values from the interval $[0,1]$ and generates results from the same interval $[0,1]$, then there has to be a value $x^*$ in the interval for which the function $f(x)$ gives back the same value. 
+    
+\end{frame}
+
+\begin{frame}{Kakutani's Fixed-Point Theorem }
+\begin{block}{Theorem (Kakutani's Fixed-Point Theorem)}
+A best response correspondence $BR: \Delta S \rightarrow \Delta S$ has a fixed point $\sigma \in BR(\sigma) $ if four conditions are satisfied:
+\begin{enumerate}
+    \item $\Delta S$ is a non-empty, compact, and convex subset of $\mathcal{R}^n$;
+    \item $BR(\sigma)$ is non-empty for all $\sigma$;
+    \item $BR(\sigma)$ is convex for all $\sigma$; 
+    \item $BR$ has a closed graph.
+\end{enumerate}
+\end{block}
+\begin{itemize}
+    \item  Nash equilibrium uses Kakutani's fixed-point theorem  on best-response correspondences to show that it has a fixed point.
+    \item All four conditions of Kakutani's fixed-point theorem are satisfied for any $2\times 2$ game. Therefore, any $2\times 2$ game has at least one Nash equilibrium.
+    
+\end{itemize}
+
+    
+\end{frame}
+\begin{frame}{Studying Nash Equilibrium Experimentally}
+    \begin{itemize}
+        \item The theory of strategic games lends itself to experimental study: arranging for subjects to play games and observing their choices is relatively straightforward.
+         \item The theory of Nash equilibrium, as we have seen, has two components: the players act in accordance with the theory of rational choice, given their beliefs about the other players’ actions, and these beliefs are correct.
+        \item Behavioral studies however, are inconclusive regarding Nash equilibrium.
+       
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Never Best Response}
+  \begin{block}{Definition}
+  A strategy $s_i\in S_i$ is \textbf{never best response} if there is no strategy $s_{-i}\in S_{-i}$ such that $s_i\in BR(s_{-i})$.
+  \end{block}  
+  \begin{itemize}
+      \item Players can never justify playing a never best response. 
+      \item A rational player should not play a strategy that is a never best response. 
+      \item This is a common knowledge: We can eliminate strategies that are never best response. 
+  \end{itemize}
+  \end{frame}
+
+\begin{frame}{Never Best Response}
+
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$Left$} & \multicolumn{1}{l}{$Right$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Up$} & \multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{0,0}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Middle$}       &
+                          \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{0,0}
+                           \\ \cline{3-4}
+                            
+                           & \multicolumn{1}{l|}{$Down$}       &
+                          \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{1, 1}
+                           \\ \cline{3-4}
+\end{tabular}
+\end{table}
+\bigskip 
+Middle is never best response:
+\begin{itemize}
+    \item If player 1 believes player 2 will play Left, then $BR(Left)=\{Up\}$.
+    \item If player 1 believes player 2 will play Right, then $BR(Right)=\{Down\}$.
+\end{itemize}
+We should never observe player 1 playing Middle.
+\end{frame}
+
+
+\begin{frame}{Summary}
+\begin{itemize}
+    \item In zero-sum games, there is no pure-strategy Nash equilibrium, however, mixed-strategy Nash equilibrium exists.
+    \item We saw examples where pure-strategy Nash equilibrium did not exist but mixed-strategy existed, and also an example, where mixed-strategy did not exist but pure-strategy existed. 
+    \item In general, Nash proved that for finite games there will be at least one Nash equilibrium.
+\end{itemize}
+    
+\end{frame}
+
+
+
+
+
+\end{document}
