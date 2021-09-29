@@ -1,0 +1,816 @@
+\documentclass{beamer}
+
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+\setbeamercovered{highly dynamic}
+\newcounter{saveenumi}
+\newcommand{\seti}{\setcounter{saveenumi}{\value{enumi}}}
+\newcommand{\conti}{\setcounter{enumi}{\value{saveenumi}}}
+
+\title{\textsc{Econ 437: Game Theory}}
+
+
+\subtitle{Lecture 8: Pure Strategy Nash Equilibrium} 
+\author{Instructor:  Mariam Arzumanyan}
+
+
+\date[UIUC, Fall 2021]{University of Illinois at Urbana-Champaign \\September 16, 2021 }
+
+
+\subject{Lecture Session}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+\pgfdeclareimage[height=0.7cm]{Illinilogo}{Illinilogo.png}
+\logo{\pgfuseimage{Illinilogo}} 
+% Let's get started
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+\begin{frame}{Introduction}
+    \begin{itemize}
+        \item Last week we have seen strict dominance. In the games like the Prisoner's Dilemma, it worked well and gave a unique prediction. 
+        \item Also, we studied iterated elimination of strictly dominated strategies. 
+        \item Today, we are going to introduce new concept: Nash equilibria.
+        \item The notion of Nash equilibrium (and its interpretation) is due
+to Nash (1950).
+        \item Suggested reading: Tadelis, "Game Theory",  pages 79-83.
+    \end{itemize}
+    
+    \textit{A Beautiful Mind} book by Sylvia Nasar (1998) is based on Nash's life, and there is a movie with the same title.
+\end{frame}
+
+\begin{frame}{BoS Game}
+ 
+    \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}       & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                                            \\
+\multirow{4}{*}{Player 1} &                                 & \multicolumn{1}{l}{Bach} & \multicolumn{1}{l}{Stravinsky} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Bach}       & \multicolumn{1}{c|}{2,1} & \multicolumn{1}{c|}{0,0}       \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Stravinsky} & \multicolumn{1}{c|}{0,0} & \multicolumn{1}{c|}{1,2}       \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item In this game, neither player has a dominant strategy, and therefore there does not exist any strictly dominant strategy equilibrium.
+    \item Since no strategy is dominated, then all strategies survive the iterated-elimination process, and therefore the entire game is iterated-elimination equilibrium. 
+    \item We need more restrictive solution concept for this game. 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Nash Equilibrium in Pure Strategies}
+    \begin{block}{Definition}
+    The pure-strategy profile $s^*=(s_1^*, s_2^*,..., s_n^*)\in S$ is a \textbf{Nash equilibrium} if $s_i^*$ is a best response to $s_{-i}^*$ for all $i \in N$, that is, 
+    \[u_i(s_i^*, s_{-i}^*)\geq u_i(s_i^\prime, s_{-i}^*), \text{ for all } s_i^\prime \in S_i, \text{ and all }i\in N. 
+    \]
+    \end{block}
+    \begin{block}{Proposition}
+    Consider a strategy profile $s^*=(s_1^*, s_2^*,..., s_n^*)$. If $s^*$ is either
+    \begin{enumerate}
+        \item a strict dominant strategy equilibrium, 
+        \item the unique survivor of iterated-elimination of strictly dominated strategies, 
+        
+    \end{enumerate}
+    then $s^*$ is the unique Nash equilibrium.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Pure-Strategy Nash Equilibrium in a Matrix}
+\begin{enumerate}
+    \item For every column, which is a strategy of player 2, find the best response of player 1. 
+    \item For every row, which is a strategy of player 1, find the best response of player 2.
+    \item If any matrix entry has both best response of player 1 and player 2, it is the outcome of a Nash equilibrium in pure strategies. 
+\end{enumerate}
+    
+\end{frame}
+
+\begin{frame}{Example 1}
+     \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{Left} & \multicolumn{1}{l}{Middle} & \multicolumn{1}{l}{Right} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Up} & \multicolumn{1}{c|}{4,4}        & \multicolumn{1}{c|}{0,0}
+                           & \multicolumn{1}{c|}{-1,-1}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Middle}       & \multicolumn{1}{c|}{0,0}         & \multicolumn{1}{c|}{4,4}   & \multicolumn{1}{c|}{1,1}\\ \cline{3-5} 
+                           & \multicolumn{1}{l|}{Down} & \multicolumn{1}{c|}{-1,-1}        & \multicolumn{1}{c|}{1,1}
+                           & \multicolumn{1}{c|}{-1,-1}\\ \cline{3-5}
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item This game has two pure strategy Nash equilibria, (Up, Left) and (Middle, Middle). 
+    \item Notice that if instead of this game, we look at the game below, the set of Nash equilibria would not change. 
+\end{itemize}
+  \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{Left} & \multicolumn{1}{l}{Middle}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Up} & \multicolumn{1}{c|}{4,4}        & \multicolumn{1}{c|}{0,0}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Middle}       &
+                          \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{4,4}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Example 2}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{2,4}        & \multicolumn{1}{c|}{1,3}
+                           & \multicolumn{1}{c|}{5,1}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{5,1}        & \multicolumn{1}{c|}{2,2}
+                           & \multicolumn{1}{c|}{3,1}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{3,3}         & \multicolumn{1}{c|}{1,4}   & \multicolumn{1}{c|}{1,5}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+    \begin{itemize}
+        \item The game has a unique Nash equilibrium, which is (M, M). 
+        \item In this game, the iterated process of eliminating dominated strategies yields a unique prediction: we expect player 1 to play M, and player 2 to play M. 
+        \item As you can see, if there is a unique iterated-elimination equilibrium, then it is a Nash equilibrium of the game. 
+    \end{itemize}
+\end{frame}
+\begin{frame}{Weak Dominance and Nash Equilibrium}
+\begin{itemize}
+    \item If the strategy is strictly dominated, then it can never be a part of Nash equilibrium. 
+    \item However, if the strategy is weakly dominated, it still can be a Nash equilibrium. 
+\end{itemize}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{Left} & \multicolumn{1}{l}{Right}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Up} & \multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{2,0}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Down}       &
+                          \multicolumn{1}{c|}{0,2}        & \multicolumn{1}{c|}{2,2}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item Down is weakly dominated strategy for player 1, and Right is weakly dominated strategy for player 2. 
+    \item Strategy profile (Down, Right) is a pure strategy Nash equilibrium of this game.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Symmetric Games}
+\begin{block}{Definition} 
+A two player strategic game is \textbf{symmetric} if the players’
+sets of actions are the same and the players’ preferences are represented by payoff functions for which $u_1(a_1, a_2) = u_2(a_2, a_1)$ for every action pair $(a_1, a_2)$.
+
+\end{block}
+  \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$a_1$} & \multicolumn{1}{l}{$a_2$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$a_1$} & \multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{0,0}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$a_2$}       &
+                          \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{1,1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+
+
+This game has a symmetric payoff matrix, and therefore it is a symmetric game. 
+\end{frame}
+
+\begin{frame}{Stag Hunt Game}
+Each of a group of hunters has two options: she may remain attentive to the pursuit of a stag, or catch a hare. If all hunters pursue the stag, they catch it and share it equally; if any hunter devotes her energy to catching a hare, the stag escapes, and the hare belongs to the defecting hunter alone. Each hunter prefers a share of the stag to a hare.
+ \par
+For the case in which there are two hunters, the game
+is shown in the table below. 
+
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Hunter 2}                                   \\
+\multirow{4}{*}{Hunter 1} &                                    & \multicolumn{1}{l}{$Stag$} & \multicolumn{1}{l}{$Hare$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Stag$} & \multicolumn{1}{c|}{2,2}        & \multicolumn{1}{c|}{0,1}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Hare$}       &
+                          \multicolumn{1}{c|}{1,0}        & \multicolumn{1}{c|}{1,1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item Notice that this game is also a symmetric game. 
+    \item Find all pure strategy Nash equilibria of this game. 
+    
+\end{itemize}
+\end{frame}
+
+\begin{frame}{ Costly Voting with Two Citizens}
+  
+
+ There are two citizens, $1$, $2$, who must elect one of two candidates A and B. Each citizens has three actions, i.e., $A_1=A_2=\{A,B, N\}$, where A and B means a vote for A and B respectively, and N means that the citizen does not vote. The candidate with the most votes wins. If candidates are tied, then each candidate wins with $\frac{1}{2}$ probability. Candidate A is citizen 1's most preferred candidate, and B is citizen 2's most preferred candidate. The payoff to a citizen if their most preferred candidate wins is 1, and 0 otherwise. A citizen who votes in the election bears a cost of c = 0.4.
+
+
+
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Citizen 2}  &                                  \\
+\multirow{5}{*}{Citizen 1} &                                    & \multicolumn{1}{l}{Vote for A} & \multicolumn{1}{l}{Vote for B} & \multicolumn{1}{l}{Not Vote} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Vote for A} & \multicolumn{1}{c|}{0.6, -0.4}        & \multicolumn{1}{c|}{0.1,0.1}
+                           & \multicolumn{1}{c|}{0.6, 0}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Vote for B}       &
+                          \multicolumn{1}{c|}{0.1, 0.1}        & \multicolumn{1}{c|}{-0.4, 0.6}
+                           & \multicolumn{1}{c|}{-0.4, 1}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{Not Vote} & \multicolumn{1}{c|}{1, -0.4 }         & \multicolumn{1}{c|}{0,0.6}   & \multicolumn{1}{c|}{0.5,0.5}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{ Costly Voting with Two Citizens}
+
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Citizen 2}  &                                  \\
+\multirow{5}{*}{Citizen 1} &                                    & \multicolumn{1}{l}{Vote for A} & \multicolumn{1}{l}{Vote for B} & \multicolumn{1}{l}{Not Vote} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Vote for A} & \multicolumn{1}{c|}{0.6, -0.4}        & \multicolumn{1}{c|}{0.1,0.1}
+                           & \multicolumn{1}{c|}{0.6, 0}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{Vote for B}       &
+                          \multicolumn{1}{c|}{0.1, 0.1}        & \multicolumn{1}{c|}{-0.4, 0.6}
+                           & \multicolumn{1}{c|}{-0.4, 1}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{Not Vote} & \multicolumn{1}{c|}{1, -0.4 }         & \multicolumn{1}{c|}{0,0.6}   & \multicolumn{1}{c|}{0.5,0.5}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item Notice that this game is not symmetric.
+    \item Find a strictly dominated strategy for citizen 1. 
+    \item Find a strictly dominated strategy for citizen 2. 
+    \item Give an intuition why those strategies are dominated. 
+    \item Find all pure strategy Nash equilibria in this game.
+\end{itemize}
+\end{frame}
+\begin{frame}{Matching Pennies}
+Two players have a penny and must choose whether to display it with heads or tails facing up. If the two pennies match (i.e., both are heads up or both are tails up) then player 2 wins player 1's penny; if the pennies do not match then player 1 wins player 2's penny. 
+    
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$Heads$} & \multicolumn{1}{l}{$Tails$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Heads$} & \multicolumn{1}{c|}{-1,1}        & \multicolumn{1}{c|}{1,-1}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$Tails$}       &
+                          \multicolumn{1}{c|}{1,-1}        & \multicolumn{1}{c|}{-1,1}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+\item This game is called a \textbf{zero-sum } game.
+    \item This game does not have a pure strategy Nash equilibrium.
+\end{itemize}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{frame}{Example 3}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{1,3}
+                           & \multicolumn{1}{c|}{3, 5}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{1,0}        & \multicolumn{1}{c|}{7,5}
+                           & \multicolumn{1}{c|}{0,-1}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{0,1}         & \multicolumn{1}{c|}{2,2}   & \multicolumn{1}{c|}{5,1}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all pure strategy Nash equilibria of this game.
+    
+\end{frame}
+
+\begin{frame}{Example 4}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{-1,1}
+                           & \multicolumn{1}{c|}{1,1}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{1,-1}        & \multicolumn{1}{c|}{-1,1}
+                           & \multicolumn{1}{c|}{0,0}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{-1,1}         & \multicolumn{1}{c|}{0,0}   & \multicolumn{1}{c|}{1,-1}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all pure strategy Nash equilibria of this game.
+    
+\end{frame}
+
+\begin{frame}{Example 5}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{6,6}        & \multicolumn{1}{c|}{2,8}
+                           & \multicolumn{1}{c|}{0,4}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{8,2}        & \multicolumn{1}{c|}{4,4}
+                           & \multicolumn{1}{c|}{1,3}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{4,0}         & \multicolumn{1}{c|}{3,1}   & \multicolumn{1}{c|}{2,2}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all pure strategy Nash equilibria of this game.
+    
+\end{frame}
+
+\begin{frame}{Example 6}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{4,3}        & \multicolumn{1}{c|}{5,1}
+                           & \multicolumn{1}{c|}{6,2}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{2,1}        & \multicolumn{1}{c|}{8,4}
+                           & \multicolumn{1}{c|}{3,6}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{3,0}         & \multicolumn{1}{c|}{9,6}   & \multicolumn{1}{c|}{2,8}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all pure strategy Nash equilibria of this game.
+    
+\end{frame}
+
+\begin{frame}{Example 7}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{-1, 3}        & \multicolumn{1}{c|}{3,3}
+                           & \multicolumn{1}{c|}{3, 5}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{1,0}        & \multicolumn{1}{c|}{3,3}
+                           & \multicolumn{1}{c|}{0,-1}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{2,-1}         & \multicolumn{1}{c|}{3,3}   & \multicolumn{1}{c|}{5,3}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all pure strategy Nash equilibria of this game.
+    
+\end{frame}
+
+\begin{frame}{Example 8}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{4,4}        & \multicolumn{1}{c|}{-1,5}
+                           & \multicolumn{1}{c|}{3, 3}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{5,-1}        & \multicolumn{1}{c|}{1,1}
+                           & \multicolumn{1}{c|}{0,-1}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{4,10}         & \multicolumn{1}{c|}{3,3}   & \multicolumn{1}{c|}{5,7}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all pure strategy Nash equilibria of this game.
+    
+\end{frame}
+
+\begin{frame}{Example 9}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{6,6}        & \multicolumn{1}{c|}{-1,7}
+                           & \multicolumn{1}{c|}{-2,8}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{7,-1}        & \multicolumn{1}{c|}{4,4}
+                           & \multicolumn{1}{c|}{-1,5}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{8,-2}         & \multicolumn{1}{c|}{5,-1}   & \multicolumn{1}{c|}{0,0}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all pure strategy Nash equilibria of this game.
+    
+\end{frame}
+
+\begin{frame}{Example 10}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{-1, 1}        & \multicolumn{1}{c|}{1,2}
+                           & \multicolumn{1}{c|}{0,0}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{2,-1}        & \multicolumn{1}{c|}{0,0}
+                           & \multicolumn{1}{c|}{0,-1}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{0.5,0.5}         & \multicolumn{1}{c|}{0.6,0.5}   & \multicolumn{1}{c|}{0.5,0.3}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all pure strategy Nash equilibria of this game.
+    
+\end{frame}
+\begin{frame}{Example 11}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{8,10}        & \multicolumn{1}{c|}{-100, 9}
+                           & \multicolumn{1}{c|}{0,0}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{7,6}        & \multicolumn{1}{c|}{6,5}
+                           & \multicolumn{1}{c|}{0,0}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{0,0}         & \multicolumn{1}{c|}{0,0}   & \multicolumn{1}{c|}{0,0}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+    \bigskip
+    Find all pure strategy Nash equilibria of this game.
+\end{frame}
+\begin{frame}{Example 12}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{6,8}        & \multicolumn{1}{c|}{2,6}
+                           & \multicolumn{1}{c|}{8,2}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{8,2}        & \multicolumn{1}{c|}{3,3}
+                           & \multicolumn{1}{c|}{9,5}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{8,10}         & \multicolumn{1}{c|}{4,6}   & \multicolumn{1}{c|}{6,7}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\bigskip
+    Find all pure strategy Nash equilibria of this game.
+\end{frame}
+\begin{frame}{Example 13}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{6,8}        & \multicolumn{1}{c|}{3,5}
+                           & \multicolumn{1}{c|}{8,2}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{7,3}        & \multicolumn{1}{c|}{5,5}
+                           & \multicolumn{1}{c|}{9,5}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{8,10}         & \multicolumn{1}{c|}{7,6}   & \multicolumn{1}{c|}{6,7}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\begin{enumerate}
+    \item Find all strictly dominated strategies for all players. 
+    \item Find all pure strategies that survive IESDS. 
+    \item Find all pure strategy Nash equilibria. 
+\end{enumerate}
+\end{frame}
+\begin{frame}{Example 14}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{1,-1}        & \multicolumn{1}{c|}{3,-3}
+                           & \multicolumn{1}{c|}{8,-8}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{3,-3}        & \multicolumn{1}{c|}{5,-5}
+                           & \multicolumn{1}{c|}{7,-7}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{8,-8}         & \multicolumn{1}{c|}{7,-7}   & \multicolumn{1}{c|}{9,-9}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\begin{enumerate}
+    \item Find all strictly dominated strategies for all players. 
+    \item Find all pure strategies that survive IESDS. 
+    \item Find all pure strategy Nash equilibria. 
+\end{enumerate}
+\end{frame}
+\begin{frame}{Example 15}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{4,3}        & \multicolumn{1}{c|}{6,2}
+                           & \multicolumn{1}{c|}{2,1}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{3,6}        & \multicolumn{1}{c|}{3,0}
+                           & \multicolumn{1}{c|}{2,8}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{2,0}         & \multicolumn{1}{c|}{8,7}   & \multicolumn{1}{c|}{2,9}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\begin{enumerate}
+    \item Find all strictly dominated strategies for all players. 
+    \item Find all pure strategies that survive IESDS. 
+    \item Find all pure strategy Nash equilibria. 
+\end{enumerate}
+\end{frame}
+\begin{frame}{Example 16}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{6,6}        & \multicolumn{1}{c|}{3,1}
+                           & \multicolumn{1}{c|}{0,8}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{1,3}        & \multicolumn{1}{c|}{5,5}
+                           & \multicolumn{1}{c|}{1,2}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{8,0}         & \multicolumn{1}{c|}{2,1}   & \multicolumn{1}{c|}{0,0}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\begin{enumerate}
+    \item Find all strictly dominated strategies for all players. 
+    \item Find all pure strategies that survive IESDS. 
+    \item Find all pure strategy Nash equilibria. 
+\end{enumerate}
+\end{frame}
+\begin{frame}{Example 17}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{0,2}        & \multicolumn{1}{c|}{0,2}
+                           & \multicolumn{1}{c|}{0,2}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{-1,-1}        & \multicolumn{1}{c|}{5,0}
+                           & \multicolumn{1}{c|}{0,0}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{-1,-1}         & \multicolumn{1}{c|}{6,4}   & \multicolumn{1}{c|}{1,1}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+\begin{enumerate}
+    \item Find all strictly dominated strategies for all players. 
+    \item Find all pure strategies that survive IESDS. 
+    \item Find all pure strategy Nash equilibria. 
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{Example 18}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{-1, 3}        & \multicolumn{1}{c|}{2,2}
+                           & \multicolumn{1}{c|}{3, 5}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{1,0}        & \multicolumn{1}{c|}{2,2}
+                           & \multicolumn{1}{c|}{0,-1}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{2,-1}         & \multicolumn{1}{c|}{2,2}   & \multicolumn{1}{c|}{5,3}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all pure strategy Nash equilibria of this game.
+    
+\end{frame}
+
+\begin{frame}{Example 19}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{10,2.5}        & \multicolumn{1}{c|}{10,2.5}
+                           & \multicolumn{1}{c|}{6, 3.5}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{6.25,2.5}        & \multicolumn{1}{c|}{3.25,3.75}
+                           & \multicolumn{1}{c|}{5.25,1.25}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{9.5,2.5}         & \multicolumn{1}{c|}{8.5,1.5}   & \multicolumn{1}{c|}{6.5, 4.75}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all pure strategy Nash equilibria of this game.
+    
+\end{frame}
+
+\begin{frame}{Example 20}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{0, 3}        & \multicolumn{1}{c|}{0,3}
+                           & \multicolumn{1}{c|}{0,3}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{$\frac{1}{3},\frac{1}{3}$}
+                           & \multicolumn{1}{c|}{0,-1}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{-1,0}         & \multicolumn{1}{c|}{$-\frac{1}{3},-\frac{1}{3}$}   & \multicolumn{1}{c|}{0,0}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all pure strategy Nash equilibria of this game.
+    
+\end{frame}
+\begin{frame}{Example 21}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{0,4}
+                           & \multicolumn{1}{c|}{0,4}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{4,0}        & \multicolumn{1}{c|}{-1,-1}
+                           & \multicolumn{1}{c|}{-1,3}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{4,0}         & \multicolumn{1}{c|}{3,-1}   & \multicolumn{1}{c|}{2,3}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all pure strategy Nash equilibria of this game.
+    
+\end{frame}
+\begin{frame}{Example 22}
+      \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{R} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{U} & \multicolumn{1}{c|}{-1, -1}        & \multicolumn{1}{c|}{-1,3}
+                           & \multicolumn{1}{c|}{-6,2}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       &
+                          \multicolumn{1}{c|}{3,-1}        & \multicolumn{1}{c|}{3,3}
+                           & \multicolumn{1}{c|}{2,2}\\ \cline{3-5}
+                           & \multicolumn{1}{l|}{D} & \multicolumn{1}{c|}{2,-6}         & \multicolumn{1}{c|}{2,2}   & \multicolumn{1}{c|}{-4,-4}\\ \cline{3-5} 
+\end{tabular}
+\end{table}
+  %   
+   \bigskip
+    Find all pure strategy Nash equilibria of this game.
+    
+\end{frame}
+\begin{frame}{Studying Nash Equilibrium Experimentally}
+    \begin{itemize}
+        \item The theory of strategic games lends itself to experimental study: arranging for subjects to play games and observing their choices is relatively straightforward.
+         \item The theory of Nash equilibrium, as we have seen, has two components: the players act in accordance with the theory of rational choice, given their beliefs about the other players’ actions, and these beliefs are correct.
+        \item We can expect the theory of Nash equilibrium to correspond to reality only approximately: like all useful theories, it definitely is not exactly correct.
+       
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Summary}
+\begin{itemize}
+    \item Any strategy profile for which players are playing mutual best responses is a Nash equilibrium, making this concept self-enforcing. 
+    \item If a strategy profile is strictly dominated, it cannot be a part of Nash equilibrium. However, a strategy profile can be weakly dominated and still be a Nash equilibrium.
+    \item We looked at many examples of Nash equilibrium. 
+
+\end{itemize}
+    
+\end{frame}
+
+
+\end{document}
