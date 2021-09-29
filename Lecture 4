@@ -1,0 +1,366 @@
+\documentclass{beamer}
+
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usepackage{hyperref}
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+\setbeamercovered{highly dynamic}
+\newcounter{saveenumi}
+\newcommand{\seti}{\setcounter{saveenumi}{\value{enumi}}}
+\newcommand{\conti}{\setcounter{enumi}{\value{saveenumi}}}
+
+\title{\textsc{Econ 437: Game Theory}}
+
+
+\subtitle{Lecture 4: Normal Form Games, Setup, Solution Concepts} 
+\author{Instructor:  Mariam Arzumanyan}
+
+
+\date[UIUC, Fall 2021]{University of Illinois at Urbana-Champaign \\September 2, 2021 }
+
+
+\subject{Lecture Session}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+\pgfdeclareimage[height=0.7cm]{Illinilogo}{Illinilogo.png}
+\logo{\pgfuseimage{Illinilogo}} 
+% Let's get started
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Introduction}
+This course consists of four major blocks. 
+    \begin{itemize}
+        \item Static games of complete information
+        \item Dynamic games of complete information
+        \item Static games of incomplete information
+        \item Dynamic games of incomplete information
+    \end{itemize}
+    \bigskip
+    Lecture notes are based on Tadelis, "Game Theory: An Introduction", pages 43-57.
+     
+\end{frame}
+\begin{frame}{Static Games of Complete Information}
+In a static game, a set of players independently and simultaneously choose their actions, and the outcome of the interaction is realized. This can be summarized by the following steps:
+    \begin{enumerate}
+        \item Each player simultaneously and independently chooses an action. 
+         \par This means that players act exactly at the same time without observing other players actions. 
+         \item The actions chosen by players leads to a payoff distribution. 
+         \par The payoff of a player depends not only from their own actions, but also on the actions of everyone else interacting.  
+    \end{enumerate}
+     
+\end{frame}
+\begin{frame}{Games of Complete Information}
+A game of complete information requires that the following four components be common knowledge among all players of the game:
+    \begin{enumerate}
+        \item all the possible actions of all the players,
+        \item all the possible outcomes, 
+        \item how  each combination of actions of all players affects which outcome will materialize,
+        \item the preferences of each and every player over outcomes.
+    \end{enumerate}
+      \begin{block}{Definition}
+      An event \textit{E} is \textbf{common knowledge} if (1) everyone knows \textit{E}, (2) everyone knows that everyone knows \textit{E}, and so on ad infinitum. 
+      \end{block}
+\end{frame}
+\begin{frame}{Common Knowledge: Example}
+Three friends are seating at a restaurant eating dinner. It is a tradition in this restaurant to put hats on their guests. The hats are either orange or blue  hat. Each friend can see the color of all hats expect of their own. The waiter announces that \textbf{at least one} of the hats is blue. And then says:
+\begin{center}
+    \textit{"If you know you are wearing a blue hat, stand up."}
+\end{center}
+None of the friends stand up. Then, the waiter repeats:
+\begin{center}
+    \textit{"If you know you are wearing a blue hat, stand up."}
+\end{center}
+Again, nobody stands up. Then, the waiter repeats:
+\begin{center}
+    \textit{"If you know you are wearing a blue hat, stand up."}
+\end{center}
+Now all three friends stand up. What are the colors of the hats?
+\end{frame}
+\begin{frame}{Normal-Form Representation of Static Games}
+The \textbf{normal-form game} representation  or strategic game for static games of complete information must include the following three components:
+    \begin{enumerate}
+        \item A set of players. 
+        \item A set of actions for each player. 
+        \item A set of payoff functions for each player that give a payoff value to each combination of players' chosen actions. 
+    \end{enumerate}
+      To analyze a game, the description of the game, or its normal-form is the starting point. 
+\end{frame}
+
+
+\begin{frame}{Pure Strategies}
+Suppose there are $n$ players.
+\begin{block}{Definition}
+A \textbf{pure strategy} for player $i$ is a deterministic plan of action. The set of all pure strategies for player 1 is denoted $S_1$, for player 2 is denoted $S_2$, for player $i$ is denoted $S_i$. 
+\end{block}
+\begin{block}{Definition}
+  A profile of pure strategies $(s_1, s_2,..., s_n)$ describes a particular combination of pure strategies chosen by all $n$ players in the game. 
+\end{block}
+
+\end{frame}
+\begin{frame}{Static Games of Complete Information}
+    \begin{itemize}
+        \item For the static games of complete information, the pure strategy is an action planned to play. 
+        \item In this case, player's pure strategy set is bounded by their action set. 
+        \item Therefore, the set of pure strategies is exactly equal to the set of all possible actions for all players. 
+        \item This means, $S_1=A_1$, $S_2=A_2$, ..., $S_n=A_n$.
+        
+    \end{itemize}
+\end{frame}
+    \begin{frame}{Normal-Form Representation of Static Games}
+The \textbf{normal-form game} representation  or strategic game for static games of complete information includes the following three components:
+    \begin{enumerate}
+        \item A set of players. 
+        \item A set of actions for each player, or sets of pure strategies, $\{S_1, S_2,..., S_n\}$. 
+        \item A set of payoff functions for each player that give a payoff value to each combination of players' chosen actions or strategies. 
+    \end{enumerate}
+      
+\end{frame}
+    \begin{frame}{Finite and Infinite Static Games}
+    \begin{itemize}
+        \item A \textbf{finite game} is a game with a finite number of players, in which the number of actions is finite for all players. 
+        \item An \textbf{infinite game} is a game with finite number of players, in which the number of actions is not finite for some players. 
+    \end{itemize}
+\end{frame}
+\begin{frame}{Example: Cournot Duopoly}
+    Two identical firms, players 1 and 2, produce some good. Assume that there are no fixed costs of production, and let the variable cost to each firm i of producing quantity $q_i\geq 0$ be given by the cost function, $c_i(q_i)=q_i^2$ for $i \in \{1,2\}$. The inverse demand is given by the function $p=100-q$, if $q<100$, and $p=0$, if $q\geq 100$, where $q=q_1+q_2$, i.e., the total output produced by both firms. The profit of firm 1 is $[p\times q_1-c_1(q_1)]$, and the profit of firm 2 is $[p \times q_2-c_2(q_2)]$.  
+    \par 
+    \end{frame}
+    \begin{frame}{Example: Cournot Duopoly}
+    The strategic form of the game is:
+    \begin{enumerate}
+        \item \textbf{Players:} $N=\{1,2\}$.
+        \item \textbf{Actions:} $A_1=A_2=[0,\infty)$.
+         \item \textbf{Strategies:} $S_1=S_2=[0,\infty)$.
+        \item \textbf{Payoffs:} $$u_1(q_1,q_2)=\begin{cases}(100-q_1-q_2)q_1-q_1^2, & \text{ if } q_1+q_2<100,  \\
+        -q_1^2, & \text{ if } q_1+q_2 \geq 100. 
+        \end{cases}$$
+        $$ u_2(q_1,q_2)=\begin{cases}(100-q_1-q_2)q_2-q_2^2, & \text{ if } q_1+q_2<100,  \\
+        -q_2^2, & \text{ if } q_1+q_2 \geq 100. 
+        \end{cases} $$
+    \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Example 1: First-Price Auction}
+    
+Consider an auction in which one indivisible object is sold, and two individuals have valuations $v_1 $ and $ v_2$ for the object. Simultaneously each individual submits a bid and the person with the highest bid receives the object for the price equal to the person's bid. Suppose that bids are integer amounts. In case of a tie, each of the highest bidders receives the object with the same probability (e.g., in in the case of two we can use a coin toss).
+
+
+\textit{Formally describe the game by specifying the players, action spaces, and payoff functions.}
+  
+\end{frame}
+\begin{frame}{Example 1: First-Price Auction}
+Normal-form representation of  the game:
+\begin{itemize}
+    \item \textbf{Players:} 2 individuals, $N=\{1,2\}$.
+    \item \textbf{Actions:} $A_1=A_2=\mathbb{Z}_+$.
+    \item \textbf{Pure Strategies:} $S_1=A_1=\mathbb{Z}_+$, $S_2=A_2=\mathbb{Z}_+$.
+    \item \textbf{Payoffs:} \[u_1(s_1,s_2)=
+\begin{cases}
+v_1-s_1, &\text{ if }s_1> s_2, \\
+\frac{1}{2}(v_1-s_1)+\frac{1}{2}0, & \text{ if }  s_1=\ s_2,  \\
+0, & \text{ if } s_1< s_2.
+\end{cases}
+    \]
+    \[u_2(s_1,s_2)=
+\begin{cases}
+v_2-s_2, &\text{ if }s_2> s_1, \\
+\frac{1}{2}(v_2-s_2)+\frac{1}{2}0, & \text{ if }  s_1=\ s_2,  \\
+0, & \text{ if } s_2< s_1.
+\end{cases}
+    \]
+\end{itemize}
+\end{frame}
+\begin{frame}{Example 2: Second-Price Auction}
+    
+Consider an auction in which one indivisible object is sold, and 2 individuals have valuations $v_1,v_2$ for the object. Simultaneously each individual submits a bid and the person with the highest bid receives the object, however, only pays second highest bid. Suppose that bids can be any real amounts. In case of a tie, each of the highest bidders receives the object with the same probability (e.g., in in the case of two we can use a coin toss).
+
+
+\textit{Formally describe the game by specifying the players, action spaces, and payoff functions.}
+  
+\end{frame}
+\begin{frame}{Example 2: Second-Price Auction}
+Normal-form representation of  the game:
+\begin{itemize}
+    \item \textbf{Players:} 2 individuals, $N=\{1,2\}$.
+    \item \textbf{Actions:} $A_1=A_2=\mathbb{R}$.
+    \item \textbf{Payoffs:}\[u_1(s_1,s_2)=
+\begin{cases}
+v_1-s_2, &\text{ if }s_1> s_2, \\
+\frac{1}{2}(v_1-s_2)+\frac{1}{2}0, & \text{ if }  s_1=\ s_2,  \\
+0, & \text{ if } s_1< s_2.
+\end{cases}
+    \]
+    \[u_2(s_1,s_2)=
+\begin{cases}
+v_2-s_1, &\text{ if }s_2> s_1, \\
+\frac{1}{2}(v_2-s_1)+\frac{1}{2}0, & \text{ if }  s_1=\ s_2,  \\
+0, & \text{ if } s_2< s_1.
+\end{cases}
+    \]
+\end{itemize}
+\end{frame}
+\begin{frame}{Example 3: All-Pay Auctions}
+Consider an auction in which two individuals bid for an object that has a value of 10 for each of them. Simultaneously each individual submits a bid, $s_i$, $i=1,2$.  \textit{Both} individuals pay the value of their bid, however, only the highest bidder gets the object.  In case of a tie the winner is determined by coin toss.  E.g., if the bids are 3 and 6, then the second individual gets the object, and payoffs are therefore $-3$ and $10-6=4$.
+
+    \textit{ Formally describe the game by specifying players, actions, and payoff functions.
+}
+\end{frame}
+\begin{frame}{Example 3: All-Pay Auctions}
+
+\begin{itemize}
+    \item \textbf{Players:}  $\mathbb{I}=\{1,2\}$.
+    \item \textbf{Actions:} $A_1=A_2=[0,\infty )$.
+    \item \textbf{Payoffs: } \[u_1(s_1,s_2)=
+\begin{cases}
+10-s_1, &\text{ if }s_1> s_2, \\
+\frac{1}{2}(10-s_1)+\frac{1}{2}(-s_1), & \text{ if }  s_1=\ s_2,  \\
+-s_1, & \text{ if } s_1< s_2.
+\end{cases}
+    \]
+    \[u_2(s_1,s_2)=
+\begin{cases}
+v_2-s_2, &\text{ if }s_2> s_1, \\
+\frac{1}{2}(v_2-s_2)+\frac{1}{2}(-s_2), & \text{ if }  s_1=\ s_2,  \\
+-s_2, & \text{ if } s_2< s_1.
+\end{cases}
+    \]
+\end{itemize}
+    
+\end{frame}
+\begin{frame}{Election Game}
+\begin{itemize}
+    \item There are two candidates running for office, whom we call $A$ and $B$. 
+    \item Each student received a paper, which specified if they prefer $A$ or $B$. Each student $i$ has three actions available to them, $A_i=\{A,B, N\}$, where A and B means a vote for A and B respectively, and N means that the student does not vote.
+    \item The payoff to a student if their most preferred candidate wins is 2 extra credits, and 0 otherwise. However, students who choose to vote in the election bear a cost of c = 1, i.e., they lose 1 extra credit. 
+    \item The candidate with the most votes wins. If candidates are tied, the winner is determined by a coin toss.
+    \bigskip
+    
+ \href{https://forms.gle/egDP3J9rKo4oKd9XA}{https://forms.gle/egDP3J9rKo4oKd9XA}
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Example 4: Costly Voting}
+  
+
+ There are two citizens, $1$, $2$, who must elect one of two candidates A and B. Each citizens has three actions, i.e., $A_1=A_2=\{A,B, N\}$, where A and B means a vote for A and B respectively, and N means that the citizen does not vote. The candidate with the most votes wins. If candidates are tied, which includes the case that none of the citizens participates in the election, then the winning candidate is determined by coin toss, i.e., in this case each candidate wins with $50\%$ probability. Candidate A is citizen 1's most preferred candidate, and B is citizen 2's most preferred candidate. 
+ 
+ \end{frame}
+ \begin{frame}{Example 4: Costly Voting}
+ The payoff to a citizen if their most preferred candidate wins is 2, and 0 otherwise. A citizen who participates in the election bears a cost of c = 1.
+For example, if 1 votes for A, and 2 does not vote, then candidate A wins: player 1's payoff is 2-c, while player 2's payoff is 0.
+Fill in the missing entries in the payoff matrix.
+
+ \begin{center}
+    
+  \begin{tabular}{ | l | c |  c| r| }
+    \hline
+    \textit{  } & $A$   \text{         }    & $B$    \text{         }    & $N$ \\ \hline
+    $A$ & & & 1, 0 \\ \hline
+   $B$ &  & & \\ \hline
+   $N$ & & & \\ \hline
+ 
+  \end{tabular}
+  
+\end{center}
+\end{frame}
+\begin{frame}{Solution Concepts}
+ \begin{itemize}
+     \item We learned how to describe a game formally and fit it into a well-defined structure. 
+     \item However, we need  a \textbf{solution concept} that will result in predictions or choices of how game should be played. 
+     \item Solution concept's prediction are the equilibria of the game. 
+ \end{itemize}   
+\end{frame}
+\begin{frame}{Assumptions and Setup}
+\begin{enumerate}
+    \item \textbf{Players are "rational":}  Rational players have rational preferences, and choose their actions to maximize their payoff. 
+    \item \textbf{Players are "intelligent":} An  intelligent player knows everything about the game: the actions, the outcomes, and preferences of all the players.
+    \item \textbf{Common Knowledge:} The fact that players are rational and intelligent is common knowledge among the players of the game.
+    \item \textbf{Self-enforcement:} Any prediction (or equilibrium) of a solution concept must be self-enforcing. 
+\end{enumerate}
+    
+\end{frame}
+\begin{frame}{Evaluating Solution Concepts}
+\begin{enumerate}
+    \item \textbf{Existence: How often does it apply?} A solution concept should apply generally and should not be developed to a certain games or situations.
+    \item \textbf{Uniqueness: How much does it restrict behavior?} Solution concept should restrict the set of possible outcomes to a reasonable outcomes. 
+    \item \textbf{Invariance: How sensitive is it to small changes?} Solution concept should be invariant to small changes in game's structure.
+\end{enumerate}
+    
+\end{frame}
+
+\begin{frame}{Evaluating Outcomes}
+\begin{itemize}
+\item Economists use Pareto optimal criterion to evaluate if an outcome is socially optimal or not. 
+\item An outcome is considered socially not optimal if there is a different outcome that would make some people better off without hurting others.
+\end{itemize}
+\begin{block}{Definition}
+  A strategy profile $s\in S$ \textbf{Pareto dominates} strategy profile $s'\in S$ if for all players $u_i(s)\geq u_i(s')$, however for at least one player it is strict, i.e., $u_i(s)> u_i(s')$. A strategy profile is Pareto optimal if there is no other strategy that Pareto dominates it.
+\end{block}    
+\end{frame}
+\begin{frame}{Summary}
+\begin{itemize}
+    \item In this class, we studied pure strategies for static games. 
+    \item We looked at the normal form representation of a game. 
+    \item We discussed the desired properties of solution concepts.
+\end{itemize}
+    
+\end{frame}
+\begin{frame}{Create Your Own Game}
+    \begin{itemize}
+        \item At this point you should be able to understand the structure of the game, and basically create your own game. You can even name it after yourself. 
+        \item Who are players of your games? Are they real? Are they imaginary? Did you hear about them in the news? Does your example involve dinosaurs? Use your imagination! 
+        \item What are actions of each player? What can they do in your game?
+        \item What are the payoffs? Can it be represented in matrix form? 
+    \end{itemize}
+\end{frame}
+
+
+\end{document}
