@@ -1,0 +1,1031 @@
+\documentclass{beamer}
+\usepackage{multicol}
+\usepackage{multirow}
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+\usepackage{multirow}
+\usepackage{istgame}
+\usepackage{multicol}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usepackage{tikz-qtree}
+\usepackage{amsmath}
+\tikzset{
+  % Two node styles for game trees: solid and hollow
+  solid node/.style={circle,draw,inner sep=2,fill=black},
+  hollow node/.style={circle,draw,inner sep=2},
+  empty node/.style={rectangle,draw,fill=white,color=white}
+}
+
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+\setbeamercovered{highly dynamic}
+\newcounter{saveenumi}
+\newcommand{\seti}{\setcounter{saveenumi}{\value{enumi}}}
+\newcommand{\conti}{\setcounter{enumi}{\value{saveenumi}}}
+
+\title{\textsc{Econ 437: Game Theory}}
+
+
+\subtitle{Lecture 11: Dynamic Games, Subgame Perfect Equilibrium, Backward Induction} 
+\author{Instructor:  Mariam Arzumanyan}
+
+
+\date[UIUC, Fall 2021]{University of Illinois at Urbana-Champaign \\September 28, 2021 }
+
+
+\subject{Lecture Session}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+\pgfdeclareimage[height=0.7cm]{Illinilogo}{Illinilogo.png}
+\logo{\pgfuseimage{Illinilogo}} 
+% Let's get started
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+
+\begin{frame}{Introduction }
+\begin{itemize}
+    \item Last class, we finished our discussion on the static games of complete information. 
+    \item Today, we will introduce the notion of game tree, and pure-strategies for extensive-form games. 
+    \item We will go over more details to find Nash equilibrium of extensive-form game using matrix-representation.
+    \item Next, we will see new powerful solution concept: backward induction and subgame perfect equilibrium.
+    \item \textbf{Suggested Reading:} Tadelis, "Game Theory", pages 129-147.
+    
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Dynamic Games: Introduction}
+    \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{Bach}[al]
+  \istb{Stravinsky}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{Bach}[al]{2,1}
+  \istb{Stravinsky}[ar]{0,0}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{Bach}[al]{0,0}
+  \istb{Stravinsky}[ar]{1,2}
+  \endist
+\end{istgame}
+\begin{itemize}
+\item In Static Games players move only once and simultaneously.
+    \item In Dynamic Games players may move multiple times and get information about earlier moves by their opponents.
+    
+\end{itemize}
+\end{frame}
+\begin{frame}{Dynamic Games: Introduction}
+    \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{Bach}[al]
+  \istb{Stravinsky}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{Bach}[al]{2,1}
+  \istb{Stravinsky}[ar]{0,0}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{Bach}[al]{0,0}
+  \istb{Stravinsky}[ar]{1,2}
+  \endist
+\end{istgame}
+\begin{itemize}
+%\item 
+    \item Suppose that we are looking at BoS game, however, now players have Instagram, and they can check each others' stories. 
+    \item Before going to concert, player 2 can check and see where player 1 is.
+    \item What will be the outcome of this game now?
+    
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Dynamic Games: Introduction}
+    \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{Bach}[al]
+  \istb{Stravinsky}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{Bach}[al]{2,1}
+  \istb{Stravinsky}[ar]{0,0}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{Bach}[al]{0,0}
+  \istb{Stravinsky}[ar]{1,2}
+  \endist
+\end{istgame}
+\begin{itemize}
+    \item In this game, we are going to see, that the "reasonable" outcome is to play Bach by both players. 
+    \item The goal of this part of the course is to study games where players can play in multiple periods instead of playing simultaneously. 
+    
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Extensive-Form Game}
+The extensive-form representation includes: 
+\begin{enumerate}
+    \item Set of player, $N$.
+    \item Order of moves. 
+    \item Actions of players when they can move. 
+    \item Players' payoffs as a function of outcomes. 
+    \item The structure of the extensive-form game is a common knowledge among all the players. 
+    
+\end{enumerate}
+    
+\end{frame}
+
+\begin{frame}{Game Tree}
+\begin{block}{Definition}
+A \textbf{game tree} is a set of nodes $x \in X$ with a precedence relation $x > x^\prime$, which means $x$ precedes $x^\prime$. Every node in a game tree has only one predecessor. There is a special node called the \textbf{root} of the tree, that precedes any other node. Nodes that do not precede other nodes are called terminal nodes. Terminal nodes denote the final outcomes of the game with which payoffs are associated. 
+\end{block}
+    
+\end{frame}
+
+
+\begin{frame}{Game Trees: Example 1}
+
+ 
+
+\begin{istgame}[font=\scriptsize]
+\setistmathTF*001{text}        % input mode changer
+%% tree
+\xtdistance{15mm}{30mm}
+\istroot(1){Player 1}
+  \istb{Not Play}[al]{(1,1)}
+  \istb{Play}[ar]
+  \endist
+\istroot(2)(1-2){ Player 2}
+  \istb{Trust}[al]
+  \istb{Distrust}[ar]{(0,2)}
+  \endist
+\istroot(3)(2-1){Player 3}
+  \istb{Not Steal}[al]{(3,3)}
+  \istb{Steal}[ar]{(4, 0)}
+  \endist
+\end{istgame}
+    
+    
+\end{frame}
+
+\begin{frame}{Game Tree: Example 2}
+
+ 
+\begin{istgame}
+%\setistgrowdirection'{east}
+\xtdistance{15mm}{30mm}
+\istroot(0)[chance node]{Player 1}
+\istb{L}[al]{(2,2)}
+\istb{R}[ar]
+\endist
+\istroot(1)(0-2)<above right>{Player 2}
+\istb{U}[al]
+\istb{D}[ar]
+\endist
+\xtdistance{10mm}{20mm}
+\istroot(2)(1-1)
+\istb{\ell}[al]{(4,2)}
+\istb{r}[ar]{(1,1)}
+\endist
+\istroot(3)(1-2)
+\istb{\ell}[al]{(3,2)}
+\istb{r}[ar]{(0,3)}
+\endist
+\xtInfoset(2)(3){Player 1}
+\end{istgame}
+
+    
+\end{frame}
+
+
+    
+
+\begin{frame}{Imperfect versus Perfect Information}
+\begin{block}{Definition}
+A game of complete information in which every information set is singleton and there are no moves of Nature is called a \textbf{game of perfect information}. A game in which some information sets contain several nodes or in which there are moves of Nature is called a \textbf{game of imperfect information}. 
+
+\end{block}
+\begin{block}{Definition}
+A game of \textbf{perfect recall} is one in which no player ever forgets information that he/she previously knew.
+\end{block}
+
+    
+\end{frame}
+
+\begin{frame}{Pure Strategies}
+\textbf{Pure strategies in extensive-form games} is a complete plan of play that describes which action player will choose at each information set. 
+\begin{block}{Definition}
+A \textbf{pure strategy } for player i is a mapping $s_i:H_i\rightarrow A_i$ that assigns an action $s_i(h_i)\in A_i(h_i)$ for every information set $h_i\in H_i$. We denote by $S_i$ the set of all pure-strategy mappings $s_i \in S_i$.
+
+\end{block}
+
+\end{frame}
+\begin{frame}{Pure Strategies}
+    \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{Bach}[al]
+  \istb{Stravinsky}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{Bach}[al]{2,1}
+  \istb{Stravinsky}[ar]{0,0}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{Bach}[al]{0,0}
+  \istb{Stravinsky}[ar]{1,2}
+  \endist
+\end{istgame}
+    \begin{itemize}
+        \item Player 1 has only two pure strategies: to play Bach or Stravinsky. 
+        \item Player 2 has to decide every single play after every single decision of player 1: Her pure strategy should completely tell what she will play after player 1 plays Bach and Stravinsky. 
+        \item An example of player 2's pure strategy is: Play Bach after player 1 plays Bach, play Bach after player 1 plays Stravinsky. 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Pure Strategies}
+    \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{Bach}[al]
+  \istb{Stravinsky}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{Bach}[al]{2,1}
+  \istb{Stravinsky}[ar]{0,0}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{Bach}[al]{0,0}
+  \istb{Stravinsky}[ar]{1,2}
+  \endist
+\end{istgame}
+\par
+Player 2 has 4 pure strategies in this game:
+    \begin{enumerate}
+        \item Bach after Bach,  Bach after Stravinsky: We denote it (BB). 
+        \item Stravinsky after Bach, Bach after Stravinsky: (SB).
+        \item Bach after Bach, Stravinsky after Stravinsky: (BS).
+        \item Stravinsky after Bach, Stravinsky after Stravinsky: (SS).
+        
+    \end{enumerate}
+    
+\end{frame}
+
+\begin{frame}{Normal-Form Representation of Extensive-Form Games}
+Notice that dynamic games can have a normal form representation. We can use pure strategies by both players, and use matrix representation. 
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}            &   & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{BB} & \multicolumn{1}{l}{SB} & \multicolumn{1}{l}{BS} &\multicolumn{1}{l}{SS} \\ \cline{3-6} 
+                          & \multicolumn{1}{l|}{B} & \multicolumn{1}{c|}{2,1}        & \multicolumn{1}{c|}{0,0}
+                           & \multicolumn{1}{c|}{2,1}
+                            & \multicolumn{1}{c|}{0,0}\\ \cline{3-6} 
+                          & \multicolumn{1}{l|}{S}       &
+                          \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{0,0}
+                           & \multicolumn{1}{c|}{1,2} &\multicolumn{1}{c|}{1,2}
+                           \\\cline{3-6}
+\end{tabular}
+\end{table}
+\bigskip
+   \textbf{Remark:} To find Nash equilibrium of an extensive-form game, we need to find its normal-form representation, and find Nash equilibrium of that game. 
+\end{frame}
+
+
+
+\begin{frame}{Extensive-Form Game}
+    \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{Bach}[al]
+  \istb{Stravinsky}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{Bach}[al]{2,1}
+  \istb{Stravinsky}[ar]{0,0}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{Bach}[al]{0,0}
+  \istb{Stravinsky}[ar]{1,2}
+  \endist
+\end{istgame}
+
+Formal description of the game:
+\begin{enumerate}
+    \item \textbf{Players:} $N=\{1,2\}$.
+    \item \textbf{Stages: } $t=1,2$.
+    \item \textbf{Actions:} $A_1=\{Bach, Stravinsky\}$, $A_2=\{Bach, Stravinsky\}$.
+    \item \textbf{Payoffs:} Payoffs can be found in terminal nodes of game tree. 
+    
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Pure Strategies}
+\textbf{Pure strategies in extensive-form games} is a complete plan of play that describes which action player will choose at each information set. 
+\begin{block}{Definition}
+A \textbf{pure strategy } for player i is a mapping $s_i:H_i\rightarrow A_i$ that assigns an action $s_i(h_i)\in A_i(h_i)$ for every information set $h_i\in H_i$. We denote by $S_i$ the set of all pure-strategy mappings $s_i \in S_i$.
+
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Pure Strategies}
+    \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{Bach}[al]
+  \istb{Stravinsky}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{Bach}[al]{2,1}
+  \istb{Stravinsky}[ar]{0,0}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{Bach}[al]{0,0}
+  \istb{Stravinsky}[ar]{1,2}
+  \endist
+\end{istgame}
+    \begin{itemize}
+        \item Player 1 has only two pure strategies: to play Bach or Stravinsky. 
+        \item Player 2 has to decide every single play after every single decision of player 1: Her pure strategy should completely tell what she will play after player 1 plays Bach and Stravinsky. 
+        \item An example of player 2's pure strategy is: Play Bach after player 1 plays Bach, play Bach after player 1 plays Stravinsky. 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Pure Strategies}
+    \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{Bach}[al]
+  \istb{Stravinsky}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{Bach}[al]{2,1}
+  \istb{Stravinsky}[ar]{0,0}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{Bach}[al]{0,0}
+  \istb{Stravinsky}[ar]{1,2}
+  \endist
+\end{istgame}
+\par
+Player 2 has 4 pure strategies in this game:
+    \begin{enumerate}
+        \item Bach after Bach,  Bach after Stravinsky: We denote it (BB). 
+        \item Stravinsky after Bach, Bach after Stravinsky: (SB).
+        \item Bach after Bach, Stravinsky after Stravinsky: (BS).
+        \item Stravinsky after Bach, Stravinsky after Stravinsky: (SS).
+        
+    \end{enumerate}
+    
+\end{frame}
+
+\begin{frame}{Normal-Form Representation of Extensive-Form Games}
+Notice that dynamic games can have a normal form representation. We can use pure strategies by both players, and use matrix representation. 
+ \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}            &   & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{BB} & \multicolumn{1}{l}{SB} & \multicolumn{1}{l}{BS} &\multicolumn{1}{l}{SS} \\ \cline{3-6} 
+                          & \multicolumn{1}{l|}{B} & \multicolumn{1}{c|}{2,1}        & \multicolumn{1}{c|}{0,0}
+                           & \multicolumn{1}{c|}{2,1}
+                            & \multicolumn{1}{c|}{0,0}\\ \cline{3-6} 
+                          & \multicolumn{1}{l|}{S}       &
+                          \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{0,0}
+                           & \multicolumn{1}{c|}{1,2} &\multicolumn{1}{c|}{1,2}
+                           \\\cline{3-6}
+\end{tabular}
+\end{table}
+\bigskip
+   \textbf{Remark:} To find Nash equilibrium of an extensive-form game, we need to find its normal-form representation, and find Nash equilibrium of that game. 
+\end{frame}
+
+
+\begin{frame}{Nim}
+\begin{itemize}
+    \item Consider the following version of Nim:
+    There are two piles of coins, and 3 coins on each pile. There are two players $Orange $ and $Blue$ moving alternating. Each player must remove one, or two coins, but if a player removes two coins, they must be from the same pile. The person who removes the last coin(s) wins. 
+  \item Each pair of blue and orange students must flip a coin to find out who starts first and who goes second. 
+  \item The team with the most wins gets 2 extra points, the second best team gets 1 point.
+  \end{itemize}  
+   % \begin{frame}{}
+    \end{frame}
+
+\begin{frame}{Nim}
+      \begin{center}
+    
+  \begin{tabular}{ | l  c | c|  r| }
+    \hline
+    Pile 1 & Pile 2 & Player move & Winning position (Y/N)? \\ \hline
+    3 & 3 & Remove \rule{0.5cm}{0.15mm}from pile \rule{0.5cm}{0.15mm} & \text{ } \\ \hline 
+ 3 & 2 & Remove \rule{0.5cm}{0.15mm}from pile \rule{0.5cm}{0.15mm} & \text{ } \\ \hline 
+    3 & 1 & Remove \rule{0.5cm}{0.15mm}from pile \rule{0.5cm}{0.15mm} & \text{ } \\ \hline 
+  3 & 0 & Remove \rule{0.5cm}{0.15mm}from pile \rule{0.5cm}{0.15mm} & \text{ } \\ \hline 
+  2 & 2 & Remove \rule{0.5cm}{0.15mm}from pile \rule{0.5cm}{0.15mm} & \text{ } \\ \hline 
+ 2 & 1 & Remove \rule{0.5cm}{0.15mm}from pile \rule{0.5cm}{0.15mm} & \text{ } \\ \hline 
+2 & 0 & Remove \rule{0.5cm}{0.15mm}from pile \rule{0.5cm}{0.15mm} & \text{ } \\ \hline 
+ 1 & 1 & Remove \rule{0.5cm}{0.15mm}from pile \rule{0.5cm}{0.15mm} & \text{ } \\ \hline 
+  1 & 0 & Remove \rule{0.5cm}{0.15mm}from pile \rule{0.5cm}{0.15mm} & \text{ } \\ \hline 
+    
+  \end{tabular}
+  
+\end{center}
+\end{frame}
+\begin{frame}{ Example 3}
+
+ 
+
+\begin{istgame}[font=\scriptsize]
+\setistmathTF*001{text}        % input mode changer
+%% tree
+\xtdistance{15mm}{30mm}
+\istroot(1){Player 1}
+  \istb{a}[al]{(1,1)}
+  \istb{b}[ar]
+  \endist
+\istroot(2)(1-2){ Player 2}
+  \istb{c}[al]{(2, 0)}
+  \istb{d}[ar]{(0,2)}
+  \endist
+
+\end{istgame}
+\par
+    Formal description of the game:
+\begin{enumerate}
+    \item \textbf{Players:} $N=\{1,2\}$.
+    \item \textbf{Stages: } $t=1,2$.
+    \item \textbf{Actions:} $A_1=\{a,b\}$, $A_2=\{c,d\}$.
+    \item \textbf{Payoffs:} Payoffs can be found in terminal nodes of game tree. 
+    
+\end{enumerate}
+    
+\end{frame}
+
+\begin{frame}{ Example 3: Pure Strategies}
+
+ 
+
+\begin{istgame}[font=\scriptsize]
+\setistmathTF*001{text}        % input mode changer
+%% tree
+\xtdistance{15mm}{30mm}
+\istroot(1){Player 1}
+  \istb{a}[al]{(1,1)}
+  \istb{b}[ar]
+  \endist
+\istroot(2)(1-2){ Player 2}
+  \istb{c}[al]{(2,0)}
+  \istb{d}[ar]{(0,2)}
+  \endist
+
+\end{istgame}
+   \par 
+\begin{itemize}
+    \item Player 1 has only 2 pure strategies: $S_1=\{a, b\}$. 
+    \item Player 2 also has only 2 pure strategies: $S_2=\{c, d\}$. 
+    \item Notice that in this game, player 2 has to move only once, that is why her available actions completely describe her pure strategies.
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Example 3: Matrix Representation}
+     \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$c$} & \multicolumn{1}{l}{$d$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$a$} & \multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{1,1}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$b$}       &
+                          \multicolumn{1}{c|}{2,0}        & \multicolumn{1}{c|}{0,2}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item This extensive-form game has a unique pure-strategy Nash equilibrium: $(a, d)$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{ Example 4}
+
+ 
+
+\begin{istgame}[font=\scriptsize]
+\setistmathTF*001{text}        % input mode changer
+%% tree
+\xtdistance{15mm}{30mm}
+\istroot(1){Player 1}
+  \istb{a}[al]{(1,1)}
+  \istb{b}[ar]
+  \endist
+\istroot(2)(1-2){ Player 2}
+  \istb{c}[al]
+  \istb{d}[ar]{(0,2)}
+  \endist
+\istroot(3)(2-1){Player 1}
+  \istb{e}[al]{(3,3)}
+  \istb{f}[ar]{(4, 0)}
+  \endist
+\end{istgame}
+    \par
+    
+        Formal description of the game:
+\begin{enumerate}
+    \item \textbf{Players:} $N=\{1,2\}$.
+    \item \textbf{Stages: } $t=1,2,3$.
+    \item \textbf{Actions:} $A_{1, \textit{ Stage 1}}=\{a,b\}$, $A_2=\{c,d\}$, $A_{1, \textit{ Stage 3}}=\{e,f\}$, .
+    \item \textbf{Payoffs:} Payoffs can be found in terminal nodes of game tree. 
+    
+\end{enumerate}
+    
+\end{frame}
+
+\begin{frame}{ Example 4}
+
+ 
+
+\begin{istgame}[font=\scriptsize]
+\setistmathTF*001{text}        % input mode changer
+%% tree
+\xtdistance{15mm}{30mm}
+\istroot(1){Player 1}
+  \istb{a}[al]{(1,1)}
+  \istb{b}[ar]
+  \endist
+\istroot(2)(1-2){ Player 2}
+  \istb{c}[al]
+  \istb{d}[ar]{(0,2)}
+  \endist
+\istroot(3)(2-1){Player 1}
+  \istb{e}[al]{(3,3)}
+  \istb{f}[ar]{(4, 0)}
+  \endist
+\end{istgame}
+    \par
+    
+   \begin{itemize}
+       \item Player 1 has 4 pure strategies: $S_1=\{ae, be, af, bf\}$. 
+     \item Player 2 has 2 pure strategies:  $S_2=\{c,d\}$.
+   \end{itemize}
+    
+\end{frame}
+
+
+\begin{frame}{Example 4: Matrix Representation}
+     \begin{table}[]
+\centering
+
+%\label{mtel}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}                                   \\
+\multirow{4}{*}{Player 1} &                                    & \multicolumn{1}{l}{$c$} & \multicolumn{1}{l}{$d$}  \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$ae$} & \multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{1,1}
+                          \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{$be$}       &
+                          \multicolumn{1}{c|}{3,3}        & \multicolumn{1}{c|}{0,2}
+                           \\ \cline{3-4}
+                             & \multicolumn{1}{l|}{$af$}       &
+                          \multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{1,1}
+                           \\ \cline{3-4}
+                             & \multicolumn{1}{l|}{$bf$}       &
+                          \multicolumn{1}{c|}{4,0}        & \multicolumn{1}{c|}{0,2}
+                           \\ \cline{3-4}
+                           
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item Find  pure-strategy Nash equilibria of this game.
+\end{itemize}
+    
+\end{frame}
+
+
+\begin{frame}{ Example  5: Homework}
+
+  \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{a}[al]
+  \istb{b}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{c}[al]{(-1,1)}
+  \istb{d}[ar]{(0,0)}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{c}[al]
+  \istb{d}[ar]
+  \endist
+  \xtdistance{15mm}{10mm}
+  \istroot(2)(1-1){ 1}
+  \istb{e}[al]{(1,1)}
+  \istb{f}[ar]{(0,2)}
+  \endist
+   \xtdistance{15mm}{10mm}
+  \istroot(2)(1-2){ 1}
+  \istb{e}[al]{(1,1)}
+  \istb{f}[ar]{(0,2)}
+  \endist
+\end{istgame}
+
+    \par
+    
+   \begin{itemize}
+       \item Formally describe the extensive-form game. 
+       \item Find all pure strategies for all players. 
+       \item Find all pure-strategy Nash equilibrium from matrix representation.
+   \end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Subgames}
+    \begin{block}{Definition}
+    A proper subgame $G$ of an extensive-form game $\Gamma$ consists of only a single node and all its successors in $\Gamma$ with the property that if $x \in G$ and $x^\prime \in h(x)$ then $x^\prime\in G$. The subgame $G$ itself is a \textbf{game tree} with its information sets and payoffs inherited from $\Gamma$. 
+    
+    \end{block}
+\end{frame}
+
+\begin{frame}{Subgames: Example 6}
+ \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{Bach}[al]
+  \istb{Stravinsky}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{Bach}[al]{2,1}
+  \istb{Stravinsky}[ar]{0,0}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{Bach}[al]{0,0}
+  \istb{Stravinsky}[ar]{1,2}
+  \endist
+\end{istgame}
+\bigskip
+\begin{itemize}
+    \item This game has 3 subgames, two small ones and the entire game. 
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Subgames: Example 7}
+    
+\begin{istgame}[font=\scriptsize]
+\setistmathTF*001{text}        % input mode changer
+%% tree
+\xtdistance{15mm}{30mm}
+\istroot(1){Player 1}
+  \istb{a}[al]{(1,1)}
+  \istb{b}[ar]
+  \endist
+\istroot(2)(1-2){ Player 2}
+  \istb{c}[al]{(2,0)}
+  \istb{d}[ar]{(0,2)}
+  \endist
+
+\end{istgame}
+\bigskip
+\begin{itemize}
+    \item This game has 2 subgames, the small one and the entire game. 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Subgames: Example 8}
+    
+\begin{istgame}[font=\scriptsize]
+\setistmathTF*001{text}        % input mode changer
+%% tree
+\xtdistance{15mm}{30mm}
+\istroot(1){Player 1}
+  \istb{a}[al]{(1,1)}
+  \istb{b}[ar]
+  \endist
+\istroot(2)(1-2){ Player 2}
+  \istb{c}[al]
+  \istb{d}[ar]{(0,2)}
+  \endist
+\istroot(3)(2-1){Player 1}
+  \istb{e}[al]{(3,3)}
+  \istb{f}[ar]{(4, 0)}
+  \endist
+\end{istgame}
+\bigskip
+\begin{itemize}
+    \item This game has 3 subgames, the small one and the entire game. 
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}{Subgames: Example 9}
+     \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{a}[al]
+  \istb{b}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{c}[al]{(-1,1)}
+  \istb{d}[ar]{(0,0)}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{c}[al]
+  \istb{d}[ar]
+  \endist
+  \xtdistance{15mm}{10mm}
+  \istroot(2)(1-1){ 1}
+  \istb{e}[al]{(1,1)}
+  \istb{f}[ar]{(0,2)}
+  \endist
+   \xtdistance{15mm}{10mm}
+  \istroot(2)(1-2){ 1}
+  \istb{e}[al]{(1,1)}
+  \istb{f}[ar]{(0,2)}
+  \endist
+\end{istgame}
+
+\bigskip
+\begin{itemize}
+    \item This game has 5 subgames. 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sequential Rationality and Backward Induction}
+\begin{block}{Definition}
+Given strategies $\sigma_{-i}\in \Delta S_{-i}$ of $i$'s opponents, we say that $\sigma_i$ is \textbf{sequentially rational} if and only if $i$ is playing  a best response to $\sigma_{-i}$ in each of her information sets. 
+
+\end{block}
+\begin{block}{Definition}
+ \textbf{ A backward induction in games} is a procedure which starts at nodes that directly precede the terminal nodes at the end of the game and then inductively moves backward through the game tree.
+ \end{block}
+\begin{block}{Proposition}
+Any finite game of perfect information has a backward induction solution that is sequentially rational. Furthermore if no two terminal nodes prescribe the same payoffs to any player then the backward induction solution is unique. 
+ \end{block}   
+ 
+ 
+\end{frame}
+
+\begin{frame}{Subgame Perfect (Nash) Equilibrium}
+\begin{block}{Definition} 
+Let $\Gamma $ be an $n$-player extensive-form game. A behavioral strategy profile $\sigma^*=(\sigma_1^*, \sigma_2^*,..., \sigma_n^*)$ is a \textbf{subgame-perfect (Nash) equilibrium} if for every proper subgame $G$ of $\Gamma$ the restriction of $\sigma^*$ to $G$ is a Nash equilibrium of $G$. 
+
+
+\end{block}
+    \begin{block}{Proposition}
+    For any finite game of perfect information, the set of subgame-perfect Nash equilibria coincides with the set of Nash equilibria that survive \textbf{backward induction}.
+    
+    \end{block}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Subgame Perfect Equilibria: Example 10}
+ \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{Bach}[al]
+  \istb{Stravinsky}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{Bach}[al]{2,1}
+  \istb{Stravinsky}[ar]{0,0}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{Bach}[al]{0,0}
+  \istb{Stravinsky}[ar]{1,2}
+  \endist
+\end{istgame}
+\bigskip
+\begin{itemize}
+    \item This game has a unique strategy that survives backward induction, and therefore unique subgame perfect equilibrium. 
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Subgame Perfect Equilibria: Example 11}
+    
+\begin{istgame}[font=\scriptsize]
+\setistmathTF*001{text}        % input mode changer
+%% tree
+\xtdistance{15mm}{30mm}
+\istroot(1){Player 1}
+  \istb{a}[al]{(1,1)}
+  \istb{b}[ar]
+  \endist
+\istroot(2)(1-2){ Player 2}
+  \istb{c}[al]{(2,0)}
+  \istb{d}[ar]{(0,2)}
+  \endist
+
+\end{istgame}
+\bigskip
+\begin{itemize}
+    \item This game has a unique strategy that survives backward induction, and therefore unique subgame perfect equilibrium. 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Subgame Perfect Equilibria: Example 12}
+    
+\begin{istgame}[font=\scriptsize]
+\setistmathTF*001{text}        % input mode changer
+%% tree
+\xtdistance{15mm}{30mm}
+\istroot(1){Player 1}
+  \istb{a}[al]{(1,1)}
+  \istb{b}[ar]
+  \endist
+\istroot(2)(1-2){ Player 2}
+  \istb{c}[al]
+  \istb{d}[ar]{(0,2)}
+  \endist
+\istroot(3)(2-1){Player 1}
+  \istb{e}[al]{(3,3)}
+  \istb{f}[ar]{(4, 0)}
+  \endist
+\end{istgame}
+\bigskip
+\begin{itemize}
+    \item This game has a unique strategy that survives backward induction, and therefore unique subgame perfect equilibrium. 
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}{Subgame Perfect Equilibria: Example 13}
+     \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{a}[al]
+  \istb{b}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{c}[al]{(-1,1)}
+  \istb{d}[ar]{(0,0)}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{c}[al]
+  \istb{d}[ar]
+  \endist
+  \xtdistance{15mm}{10mm}
+  \istroot(2)(1-1){ 1}
+  \istb{e}[al]{(1,1)}
+  \istb{f}[ar]{(0,2)}
+  \endist
+   \xtdistance{15mm}{10mm}
+  \istroot(2)(1-2){ 1}
+  \istb{e}[al]{(1,1)}
+  \istb{f}[ar]{(0,2)}
+  \endist
+\end{istgame}
+
+\bigskip
+
+\end{frame}
+
+
+
+\begin{frame}{ Example 14: Homework}
+     \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{a}[al]
+  \istb{b}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{c}[al]{(-1,1)}
+  \istb{d}[ar]{(0,0)}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{c}[al]
+  \istb{d}[ar]
+  \endist
+  \xtdistance{15mm}{10mm}
+  \istroot(2)(1-1){ 1}
+  \istb{e}[al]{(3,-2)}
+  \istb{f}[ar]{(0,2)}
+  \endist
+   \xtdistance{15mm}{10mm}
+  \istroot(2)(1-2){ 1}
+  \istb{e}[al]{(1,1)}
+  \istb{f}[ar]{(0,2)}
+  \endist
+\end{istgame}
+
+\bigskip
+Find all pure-strategy subgame-perfect Nash equilibria. 
+\end{frame}
+
+\begin{frame}{ Example 15: Homework}
+     \begin{istgame}
+\xtdistance{15mm}{40mm}
+\istroot(0){1}
+  \istb{a}[al]
+  \istb{b}[ar]
+  \endist
+\xtdistance{15mm}{20mm}
+\istroot(1)(0-1){2}
+  \istb{c}[al]{(1,1)}
+  \istb{d}[ar]{(0,0)}
+  \endist
+\istroot(1)(0-2){2}
+  \istb{c}[al]
+  \istb{d}[ar]
+  \endist
+  \xtdistance{15mm}{10mm}
+  \istroot(2)(1-1){ 1}
+  \istb{e}[al]{(3,-2)}
+  \istb{f}[ar]{(0,2)}
+  \endist
+   \xtdistance{15mm}{10mm}
+  \istroot(2)(1-2){ 1}
+  \istb{e}[al]{(1,1)}
+  \istb{f}[ar]{(0,2)}
+  \endist
+\end{istgame}
+
+\bigskip
+Find all pure-strategy subgame-perfect Nash equilibria. 
+\end{frame}
+
+\begin{frame}{Summary }
+\begin{itemize}
+     
+    \item Today,  we studied Nash equilibrium of extensive-form game using matrix-representation.
+    \item We introduced the notion of subgame of game tree. 
+    \item Then, we studied subgame perfect Nash equilibrium and backward induction.
+  %  \item Assignment 4 is \textbf{due to next Monday, 11:59 pm}. 
+    
+\end{itemize}
+    
+\end{frame}
+
+\end{document}
