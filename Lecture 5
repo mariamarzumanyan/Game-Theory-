@@ -1,0 +1,445 @@
+\documentclass{beamer}
+
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usepackage{hyperref}
+\makeatletter
+\newcommand*{\rom}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+\setbeamercovered{highly dynamic}
+\newcounter{saveenumi}
+\newcommand{\seti}{\setcounter{saveenumi}{\value{enumi}}}
+\newcommand{\conti}{\setcounter{enumi}{\value{saveenumi}}}
+
+\title{\textsc{Econ 437: Game Theory}}
+
+
+\subtitle{Lecture 5: Best Response Correspondence} 
+\author{Instructor:  Mariam Arzumanyan}
+
+
+\date[UIUC, Fall 2021]{University of Illinois at Urbana-Champaign \\September 7, 2021 }
+
+
+\subject{Lecture Session}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+\pgfdeclareimage[height=0.7cm]{Illinilogo}{Illinilogo.png}
+\logo{\pgfuseimage{Illinilogo}} 
+% Let's get started
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\setbeamercovered{invisible}
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+\begin{frame}{Introduction}
+    \begin{itemize}
+        \item So far, we introduced the normal-form representation of the game, introduced the idea of solution concepts and their desired properties. 
+        \item Today, we are going to discuss the best response correspondence. 
+        \item Also, we are going introduce mixed strategies. 
+        \item Suggested Reading: Tadelis, "Game Theory",  pages 69-73, 101-103.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Introduction}
+\begin{block}{Definition}
+Let's denote by $s=(s_1, s_2, ..., s_n)$ the strategy profile of all players. Let's denote by $s_{-i}=(s_1, s_2,..., s_{i-1}, s_{i+1}, ..., s_n)$, the strategy profile of all players other than $i$. Similarly, $S_{-i}=(S_1, S_2,..., S_{i-1}, S_{i+1}, ..., S_n)$ is the set of all the strategy sets of all players who are not player i.
+\end{block}
+    Using this notation, we can write the payoff of player $i$ from strategy $s$ as $u_i(s_i, s_{-i})$, where $s=(s_i, s_{-i})$.
+\end{frame}
+
+\begin{frame}{Best Response Correspondence}
+\begin{block}{Definition}
+The strategy $s_i\in S_i$ is player i's best response to the opponents' strategy $s_{-i}\in S_{-i}$ if 
+\begin{equation}
+    u_i(s_i, s_{-i})\geq u_i(s_{i}^\prime, s_{-i}), \text{ for all } s_{i}^\prime \in S_i.
+\end{equation}
+$BR(s_{-i})$ denotes the set of strategies for player $i$ that best respond to the rivals' strategy $s_{-i}$.
+\end{block}
+Notice that the best response might not be unique, and therefore it is a correspondence, not a function.
+\end{frame}
+
+\begin{frame}{Example 1: The Prisoner's Dilemma}
+ 
+  
+\begin{table}[]
+\centering
+
+\label{my-label}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Criminal 2}                                    \\
+\multirow{3}{*}{Criminal 1} &                                    & \multicolumn{1}{l}{Quiet} & \multicolumn{1}{l}{Fink} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Quiet} & \multicolumn{1}{c|}{-1,-1}        & \multicolumn{1}{c|}{-4,0}   \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Fink}       & \multicolumn{1}{c|}{0,-4}         & \multicolumn{1}{c|}{-3,-3}  \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item If Criminal 2 plays Quiet, the best response of Criminal 1 is to Fink, $BR_1(Quiet)=Fink$.
+    \item If Criminal 2 plays Fink, the best response of Criminal 1 is to Fink, $BR_1(Fink)=Fink$.
+    \item If Criminal 1 plays Quiet, the best response of Criminal 2 is to Fink, $BR_2(Quiet)=Fink$.
+    \item If Criminal 1 plays Fink, the best response of Criminal 2 is to Fink, $BR_2(Fink)=Fink$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example 2: Rock-Paper-Scissors}
+    \begin{table}[]
+\centering
+
+\label{mel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{R} & \multicolumn{1}{l}{P} & \multicolumn{1}{l}{S} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{R} & \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{-1,1}
+                           & \multicolumn{1}{c|}{1,-1}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{P}       & \multicolumn{1}{c|}{1,-1}         & \multicolumn{1}{c|}{0,0}   & \multicolumn{1}{c|}{-1,1}\\ \cline{3-5} 
+                           & \multicolumn{1}{l|}{S} & \multicolumn{1}{c|}{-1,1}        & \multicolumn{1}{c|}{1,-1}
+                           & \multicolumn{1}{c|}{0,0}\\ \cline{3-5}
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item $BR_1(R)=$\pause P. If Player 2 plays Rock, the best response of Player 1 is to play Paper.
+     \item  $BR_1(P)= \pause S$. If Player 2 plays Paper, the best response of Player 1 is to play Scissors.
+      \item  $BR_1(P)=\pause S$. If Player 2 plays Scissors, the best response of Player 1 is to play Rock.
+      \item Similarly, $BR_2(R)=P$, $BR_2(P)=S$, $BR_2(S)=R$.
+\end{itemize}
+
+
+\end{frame}
+
+
+
+\begin{frame}{Example 3: Homework}
+     \begin{table}[]
+\centering
+
+\label{mtel}
+\begin{tabular}{clccc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Player 2}  &                                  \\
+\multirow{5}{*}{Player 1} &                                    & \multicolumn{1}{l}{L} & \multicolumn{1}{l}{M} & \multicolumn{1}{l}{H} \\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{L} & \multicolumn{1}{c|}{6,6}        & \multicolumn{1}{c|}{2,8}
+                           & \multicolumn{1}{c|}{0,4}\\ \cline{3-5} 
+                          & \multicolumn{1}{l|}{M}       & \multicolumn{1}{c|}{8,2}         & \multicolumn{1}{c|}{4,4}   & \multicolumn{1}{c|}{1,2}\\ \cline{3-5} 
+                           & \multicolumn{1}{l|}{H} & \multicolumn{1}{c|}{4,0}        & \multicolumn{1}{c|}{3,-1}
+                           & \multicolumn{1}{c|}{1,2}\\ \cline{3-5}
+\end{tabular}
+\end{table}
+Notice that the best response is not always unique. For example, when Player 2 plays H, then both M and H are the best for Player 1, and therefore, $BR_1(H)=\{M, H\}$.
+\par
+Find the best responses for the rest of the pure strategies.
+\end{frame}
+
+\begin{frame}{Example 4: Cournot Duopoly}
+    Consider Cournot Duopoly example with demand $p(q)=100-q$, if $q<100$, and $p(q)=0$ if $q\geq 100$, and $q=q_1+q_2$. The costs of both firms are $c_1(q_1)=10q_1$, $c_2(q_2)=10q_2$. 
+     The strategic form of the game is:
+    \begin{enumerate}
+        \item \textbf{Players:} $N=\{1,2\}$.
+        \item \textbf{Actions:} $A_1=A_2=[0,\infty)$.
+        \item \textbf{Payoffs:} $$u_1(q_1,q_2)=\begin{cases}(100-q_1-q_2)q_1-10q_1, & \text{ if } q_1+q_2<100,  \\
+        -10q_1, & \text{ if } q_1+q_2 \geq 100. 
+        \end{cases}$$
+        $$ u_2(q_1,q_2)=\begin{cases}(100-q_1-q_2)q_2-10q_2, & \text{ if } q_1+q_2<100,  \\
+        -10q_2, & \text{ if } q_1+q_2 \geq 100. 
+        \end{cases} $$
+    \end{enumerate}
+
+\end{frame}
+
+
+
+
+
+
+
+
+\begin{frame}{Example 4: Cournot Duopoly}
+
+
+Notice that if $q_2\geq 100$, the best response of firm 1 will be not to produce at all. In that case, $BR(q_2)=0$. 
+\par
+Consider the first profit function of firm 1:
+\[u_1(q_1,q_2)=(100-q_1-q_2)q_1-10q_1= 90 q_1-q_1^2-q_1q_2.
+\]
+If firm 2 chooses to produce $q_2$ amount, then firm 1 would choose $q_1$ that maximizes profits. Firm 1 solves, 
+\[\max_{q_1}90 q_1-q_1^2-q_1q_2
+\]
+FOC: $90-2q_1-q_2=0$. 
+SOC: $-2<0$. Second order condition is satisfied. 
+
+Therefore the best response is solving first order condition. 
+\[q_1=\frac{90-q_2}{2}.
+\]
+\end{frame}
+
+
+\begin{frame}{Example 4: Cournot Duopoly}
+Suppose that firm 2 produces $q_2=10$ units. Then the best response of firm 1 will be 
+\[q_1=\frac{90-q_2}{2}=\frac{90-10}{2}=\frac{80}{2}=40.
+\]
+So, $BR_1(q_2=10)=40$.
+Another example, Suppose firm 2 produces $q_2=60$ units. Then the best response of firm 1 will be 
+\[q_1=\frac{90-q_2}{2}=\frac{90-60}{2}=\frac{30}{2}=15.
+\]
+So, $BR_1(q_2=60)=15$.
+\par
+As you can see, if firm 2 produces less, then firm 1 can produce more. However, when firm 2 produces more, firm 1 has to produce less. 
+\end{frame}
+
+
+\begin{frame}{Example 4: Cournot Duopoly}
+What happens if firm 2 produces more than 90 units? Suppose that firm 2 produces $q_2=92$ units. Then the best response of firm 1 will be 
+\[q_1=\frac{90-q_2}{2}=\frac{90-92}{2}=\frac{-2}{2}=-1<0.
+\]
+In this case, if $q_2\geq 90$, then firm 1 will be better off not producing anything. 
+\par 
+We can summarize the best response correspondence of firm 1 below:
+\[ BR_1(q_2)=\begin{cases}
+\frac{90-q_2}{2}, & \text{ if } 0\leq q_2\leq 90,\\
+0, & \text{ if }  q_2\geq 90.
+\end{cases}
+\]
+
+
+\end{frame}
+
+\begin{frame}{Split or Steal?}
+    \begin{itemize}
+      
+        \item Each student has two actions to choose from: Steal or Split. 
+        \item If both students choose to split, then they both will get 1 extra credit. If one student chooses to split and the other chooses to steal, than the student who played Steal will get $2$ extra credit and the student who played Split will get 0. In case both students choose to steal, they both will end up with 0 extra credit. 
+        \item To participate in this activity, you must fill the google form: name of your opponent, your name and NetID, and your strategy. 
+  
+    \end{itemize}
+          \bigskip
+      \Large  \href{https://forms.gle/WNttuhLHvmAfDcq48}{https://forms.gle/WNttuhLHvmAfDcq48}
+    \end{frame}
+
+\begin{frame}{Split or Steal?}
+  \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Student 2}                                    \\
+\multirow{4}{*}{Student 1} &                                    & \multicolumn{1}{l}{Split} & \multicolumn{1}{l}{Steal} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Split} & \multicolumn{1}{c|}{1,1}        & \multicolumn{1}{c|}{0, 2}   \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Steal}       & \multicolumn{1}{c|}{2,0}         & \multicolumn{1}{c|}{0,0}  \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item  $BR_1(Split)= \pause Steal$, $BR_2(Split)= \pause Steal$. Notice that the best response of Split is always to Steal.
+    \item $BR_1(Steal)=\pause \{Split, Steal\}$ and $BR_2(Steal)=\{Split, Steal\}$. If Student 2 plays Steal, Student 1 is indifferent between Steal and Split, and therefore both strategies are best response. 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Mixed Strategy}
+Suppose two partners are having an argument. At some point during their fight, each of them realizes that they have two options: argue or listen to their partner. The payoffs are in the matrix below. 
+    
+    \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Partner 2}                                    \\
+\multirow{4}{*}{Partner 1} &                                    & \multicolumn{1}{l}{Listen} & \multicolumn{1}{l}{Argue} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Listen} & \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{-1, 1}   \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Argue}       & \multicolumn{1}{c|}{1,-1}         & \multicolumn{1}{c|}{-2,-2}  \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+
+
+Partner 1 is thinking:
+\par 
+\textit{If my partner listens to me, I would argue my point. However, from the past, I know that $25\%$ of the time my partner listens to me, and $75\%$ of the time my partner argues. What is the best for me, to argue or to listen?}
+\end{frame}
+
+\begin{frame}{Mixed Strategy}
+    \begin{table}[]
+\centering
+
+%\label{my-label}
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Partner 2}                                    \\
+\multirow{4}{*}{Partner 1} &                                    & \multicolumn{1}{l}{Listen} & \multicolumn{1}{l}{Argue} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Listen} & \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{-1, 1}   \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Argue}       & \multicolumn{1}{c|}{1,-1}         & \multicolumn{1}{c|}{-2,-2}  \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item Partner 1 is thinking:
+\par 
+ \textit{"If my partner listens to me, I would argue my point. However, from the past, I know that $25\%$ of the time my partner listens to me, and $75\%$ of the time my partner argues. What is the best for me, to argue or to listen?"}
+\par 
+\item Partner 1 believes that with probably $0.25$ Partner 2 plays Listen, and with probability $0.75$ plays Argue. 
+\item Partner 1's expected utility from these beliefs are:
+\[EU_1(Listen)=0.25 \times 0+0.75 \times (-1)=-0.75.
+\]
+\[EU_1(Argue)=0.25\times 1 +0.75 \times (-2)=-1.25.
+\]
+
+\end{itemize}
+\end{frame}
+\begin{frame}{Mixed Strategy}
+    \begin{table}[]
+\centering
+
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Partner 2}                                    \\
+\multirow{4}{*}{Partner 1} &                                    & \multicolumn{1}{l}{Listen} & \multicolumn{1}{l}{Argue} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Listen} & \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{-1, 1}   \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Argue}       & \multicolumn{1}{c|}{1,-1}         & \multicolumn{1}{c|}{-2,-2}  \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+\begin{itemize}
+    \item Partner 1 is thinking:
+\par 
+ \textit{"If my partner listens to me, I would argue my point. However, from the past I know that $25\%$ of the time my partner listens to me, and $75\%$ of the time my partner argues. What is the best for me, to argue or to listen?"}
+\par 
+ 
+\item Partner 1's expected utility from Listening is higher than from Arguing, since $EU(Listen)=-0.75 > -1.25=EU(Argue).$
+\item Therefore, in the best response of Partner 1 is to listen. 
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Mixed Strategies}
+\begin{itemize}
+    \item We enlarge the set of strategies for the players.
+    \item Instead of choosing a single element from $S_i$ (a pure strategy), we
+allow players to choose a probability distribution over $S_i$.
+
+\end{itemize}
+    \begin{block}{Definition}
+    Let $S_i=\{s_{i1}, s_{i2},..., s_{im}\}$ be player $i$'s finite set of pure strategies. Define $\Delta S_i$ as set of all probability distributions over $S_i$. A mixed strategy for player $i$ is a probability distribution over pure strategies, such that:
+    \begin{enumerate}
+        \item $\sigma_i(s_i)\geq 0$, for all $s_i \in S_i$,
+        \item $\sigma_1+\sigma_2+...+\sigma_m=1$.
+    \end{enumerate}
+    \end{block}
+    \end{frame}
+
+\begin{frame}{Mixed Strategies}
+  \begin{table}[]
+\centering
+
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Partner 2}                                    \\
+\multirow{4}{*}{Partner 1} &                                    & \multicolumn{1}{l}{Listen} & \multicolumn{1}{l}{Argue} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Listen} & \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{-1, 1}   \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Argue}       & \multicolumn{1}{c|}{1,-1}         & \multicolumn{1}{c|}{-2,-2}  \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+\item $S_1=\{  Listen, Argue \}$, $\Delta S_1= \{ (\sigma_1, \sigma_2)\}$ such that $\sigma_1+\sigma_2=1$, and $\sigma_1 \in [0,1]$, $\sigma_2 \in [0,1]$.
+\item \textbf{Examples of mixed strategy:} $(\frac{1}{2}, \frac{1}{2})$,  $(\frac{1}{3}, \frac{2}{3})$, $(0.9, 0.1)$. 
+
+\item \textbf{ Not so good examples: } $(0.7, 0.8)$, $(-0.2, -0.8)$, $(25, 75)$, $(50, 50)$. 
+\item In the first case you can see that all the probabilities are between $[0,1]$, and they sum up to 1. 
+\item In the second example, however, at least one of those conditions is violated. 
+\end{itemize}
+ \end{frame}
+
+\begin{frame}{Mixed Strategies}
+\begin{itemize}
+    \item We can find best response correspondence not only for pure strategies, but also for the mixed strategies. 
+\end{itemize}
+  \begin{table}[]
+\centering
+
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Partner 2}                                    \\
+\multirow{4}{*}{Partner 1} &                                    & \multicolumn{1}{l}{Listen} & \multicolumn{1}{l}{Argue} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Listen} & \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{-1, 1}   \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Argue}       & \multicolumn{1}{c|}{1,-1}         & \multicolumn{1}{c|}{-2,-2}  \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item Suppose Partner 1 is mixing between  Listen and Argue $(0.8, 0.2)$. 
+    \item In order to understand the best response of Partner 2, we need to calculate the expected payoff from Listening and Arguing.
+    \[EU_2(Listen)=0.8 \times 0+0.2 \times (-1)=-0.2.
+\]
+\[EU_2(Argue)=0.8\times 1 +0.2 \times (-2)=0.4.
+\]
+    \item Since $EU_2(Argue) > EU_2(Listen)$, then it is better for Partner 2 to Argue. 
+\end{itemize}
+ \end{frame}
+
+\begin{frame}{Example 5: Homework}
+
+  \begin{table}[]
+\centering
+
+\begin{tabular}{clcc}
+\multicolumn{1}{l}{}      & \multicolumn{1}{c}{}               & \multicolumn{2}{c}{Partner 2}                                    \\
+\multirow{4}{*}{Partner 1} &                                    & \multicolumn{1}{l}{Listen} & \multicolumn{1}{l}{Argue} \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Listen} & \multicolumn{1}{c|}{0,0}        & \multicolumn{1}{c|}{-1, 1}   \\ \cline{3-4} 
+                          & \multicolumn{1}{l|}{Argue}       & \multicolumn{1}{c|}{1,-1}         & \multicolumn{1}{c|}{-2,-2}  \\ \cline{3-4} 
+\end{tabular}
+\end{table}
+\begin{itemize}
+  \item Suppose Partner 2 is mixing with probabilities $(0.3, 0.7)$. What are the expected utilities of Partner 1 from Listening and Arguing? What is the best response of Partner 1? 
+  \item Repeat the exercise for the following probabilities: 
+  $(0.1, 0.9)$, $(0.2, 0.8)$, $(0.9, 0.1)$, $(0.7, 0.3)$, $(0.5,0.5)$. 
+  \item Given the probabilities of Partner 2, when is it best for Partner 1 to Argue?
+  \item Now suppose Partner 1 is mixing with probabilities $(0.3, 0.7)$. What are the expected utilities of Partner 2 from Listening and Arguing? What is the best response of Partner 2? Is it different from the best response of the Partner 1?
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Summary}
+\begin{itemize}
+    \item We introduced and discussed the best response correspondence. 
+    \item To calculate best response, we need to understand what is the best strategy for each player. By best, we mean the one that gives highest payoff. 
+    \item Then, we introduced mixed strategy, and we studied best response correspondence for mixed strategies. 
+    \item \textbf{ Assignment 1 is due next Monday, 11:59 pm.}
+\end{itemize}
+    
+\end{frame}
+
+
+
+\end{document}
